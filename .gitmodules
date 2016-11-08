@@ -1,0 +1,3 @@
+[submodule "lib/atomthreads"]
+	path = lib/atomthreads
+	url = https://github.com/kelvinlawson/atomthreads.git
