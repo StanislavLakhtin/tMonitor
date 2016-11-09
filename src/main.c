@@ -1,12 +1,8 @@
 #include <libopencm3/stm32/rcc.h>
-#include <libopencm3/stm32/gpio.h>
-#include <libopencm3/cm3/nvic.h>
 
 //#include <stdio.h>
 
 #include "atom.h"
-#include "atomport-private.h"
-#include "atomtimer.h"
 
 #define ONEWIRE_USART3
 #define MAXDEVICES_ON_THE_BUS 3
@@ -22,15 +18,14 @@ static uint8_t thread_stacks[2][STACK_SIZE];
 
 static void main_thread_func(uint32_t data);
 
-OneWire ow;
+
 
 extern int board_setup(void);
 
 int main(void) {
     int8_t status;
     uint32_t loop;
-    ow.usart = USART3;
-
+    
     /**
      * Brief delay to give the debugger a chance to stop the core before we
      * muck around with the chip's configuration.
@@ -65,12 +60,15 @@ int main(void) {
 extern void test_led_toggle(void);
 
 static void main_thread_func(uint32_t data __maybe_unused) {
+    OneWire ow;
+    ow.usart = USART3;
+#ifdef _STDIO_H_
     /* Print message */
-//    printf("Hello, world!\n");
-
+    printf("Hello, world!\n");
+#endif
     /* Loop forever and blink the LED */
     bool readWrite = true;
-    uint32_t pDelay, i;
+    uint32_t pDelay = 0, i;
 
     while (1) {
         if (owResetCmd(&ow) != ONEWIRE_NOBODY) {    // is anybody on the bus?
@@ -82,19 +80,25 @@ static void main_thread_func(uint32_t data __maybe_unused) {
                     case DS18B20:
                         t = readTemperature(&ow, &ow.ids[i],
                                             true); //it will return PREVIOUS value and will send new measure command
-//                        printf("DS18B20 (SN: %x%x%x%x%x%x), Temp: %3d.%d \n", r->code[0], r->code[1], r->code[2],
-//                               r->code[3], r->code[4], r->code[5], t.inCelsus, t.frac);
+#ifdef _STDIO_H_
+                    printf("DS18B20 (SN: %x%x%x%x%x%x), Temp: %3d.%d \n", r->code[0], r->code[1], r->code[2],
+                           r->code[3], r->code[4], r->code[5], t.inCelsus, t.frac);
+#endif
                         break;
                     case DS18S20:
                         t = readTemperature(&ow, &ow.ids[i], true);
-//                        printf("DS18S20 (SN: %x%x%x%x%x%x), Temp: %3d.%d \n", r->code[0], r->code[1], r->code[2],
-//                               r->code[3], r->code[4], r->code[5], t.inCelsus, t.frac);
+#ifdef _STDIO_H_
+                    printf("DS18S20 (SN: %x%x%x%x%x%x), Temp: %3d.%d \n", r->code[0], r->code[1], r->code[2],
+                           r->code[3], r->code[4], r->code[5], t.inCelsus, t.frac);
+#endif
                         break;
                     case 0x00:
                         break;
                     default:
-//                        printf("UNKNOWN Family:%x (SN: %x%x%x%x%x%x)\n", r->family, r->code[0], r->code[1], r->code[2],
-//                               r->code[3], r->code[4], r->code[5]);
+#ifdef _STDIO_H_
+                        printf("UNKNOWN Family:%x (SN: %x%x%x%x%x%x)\n", r->family, r->code[0], r->code[1], r->code[2],
+                               r->code[3], r->code[4], r->code[5]);
+#endif
                         break;
                 }
                 pDelay = 1200000;

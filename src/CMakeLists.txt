@@ -5,7 +5,7 @@ file(GLOB USER_SOURCES ./*.c ./*.cpp
         ${ONEWIRE_ROOT}/src/*.c
         ${ATOMTHREADS}/kernel/*.c
         ${ATOMTHREADS_PORTROOT}/*.S
-        ${ATOMTHREADS_PORTROOT}/*.c)
+        ${ATOMTHREADS_PORTROOT}/atom*.c)
 
 add_executable(${PROJECT_NAME}.elf ${USER_SOURCES})
 
