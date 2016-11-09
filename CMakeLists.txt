@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(tMonitor)
 
+enable_language(ASM)
+
 IF(NOT CMAKE_CROSSCOMPILING)
     message(FATAL_ERROR "Cross compiling only. Please use -DCMAKE_TOOLCHAIN_FILE=/PATH/TO/TOOLCHAIN_FILE .")
 ENDIF(NOT CMAKE_CROSSCOMPILING)
@@ -27,7 +29,7 @@ link_directories(
         ${ATOMTHREADS_PORTROOT}/build)
 
 set(STM32F1_FLAGS "-mcpu=cortex-m3 -mthumb -mthumb-interwork -msoft-float")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall ${STM32F1_FLAGS} -std=c99 -Wint-conversion")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall ${STM32F1_FLAGS} -Wint-conversion")
 set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wall --std=c++14 ${STM32F1_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -T ${CMAKE_SOURCE_DIR}/libopencm3.ld -nostartfiles --specs=rdimon.specs -Wl,-Map=${PROJECT_SOURCE_DIR}/build/${PROJECT_NAME}.map")
 

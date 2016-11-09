@@ -1,89 +1,74 @@
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/gpio.h>
-#include <stdio.h>
-#include <errno.h>
+#include <libopencm3/cm3/nvic.h>
 
-// Должно быть объявлено ДО include "OneWire.h", чтобы был добавлен обработчик соответствующего прерывания
-//#define ONEWIRE_UART5
-//#define ONEWIRE_UART4
+//#include <stdio.h>
+
+#include "atom.h"
+#include "atomport-private.h"
+#include "atomtimer.h"
+
 #define ONEWIRE_USART3
-//#define ONEWIRE_USART2
-//#define ONEWIRE_USART1
-
-//#define MAXDEVICES_ON_THE_BUS 3
+#define MAXDEVICES_ON_THE_BUS 3
 
 #include "OneWire.h"
 
-#define USART_CONSOLE USART2
+#define STACK_SIZE      1024
+#define THREAD_PRIO     42
 
-int _write(int file, char *ptr, int len);
+static ATOM_TCB main_tcb;
 
-/* STM32 в 72 MHz. */
-static void clock_setup(void) {
-    rcc_clock_setup_in_hse_8mhz_out_72mhz();
+static uint8_t thread_stacks[2][STACK_SIZE];
 
-    /* Enable GPIOB, GPIOC, and AFIO clocks. */
-    rcc_periph_clock_enable(RCC_GPIOA);
-    rcc_periph_clock_enable(RCC_GPIOB);
-    rcc_periph_clock_enable(RCC_GPIOC);
-
-    rcc_periph_clock_enable(RCC_AFIO);
-
-    /* Enable clocks for USARTs. */
-    rcc_periph_clock_enable(RCC_USART2); //включить, если используется отладка
-#ifdef ONEWIRE_USART3
-    rcc_periph_clock_enable(RCC_USART3);
-#endif
-}
-
-int _write(int file, char *ptr, int len) {
-    int i;
-
-    if (file == 1) {
-        for (i = 0; i < len; i++)
-            usart_send_blocking(USART_CONSOLE, ptr[i]);
-        return i;
-    }
-    errno = EIO;
-    return -1;
-}
-
-
-static void gpio_setup(void) {
-    gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_10_MHZ,
-                  GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO_USART2_TX | GPIO_USART2_RX);
-
-    gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_10_MHZ,
-                  GPIO_CNF_OUTPUT_ALTFN_OPENDRAIN, GPIO_USART3_TX | GPIO_USART3_RX);
-
-    gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_2_MHZ,
-                  GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
-
-    AFIO_MAPR |= AFIO_MAPR_SWJ_CFG_FULL_SWJ_NO_JNTRST;
-
-    /* Preconf USART2 for output*/
-    // Настраиваем
-    usart_set_baudrate(USART_CONSOLE, 115200);
-    usart_set_databits(USART_CONSOLE, 8);
-    usart_set_stopbits(USART_CONSOLE, USART_STOPBITS_1);
-    usart_set_mode(USART_CONSOLE, USART_MODE_TX_RX);
-    usart_set_parity(USART_CONSOLE, USART_PARITY_NONE);
-    usart_set_flow_control(USART_CONSOLE, USART_FLOWCONTROL_NONE);
-    usart_enable(USART_CONSOLE);
-
-    /* Preconf LED. */
-    gpio_clear(GPIOC, GPIO13);
-}
+static void main_thread_func(uint32_t data);
 
 OneWire ow;
 
+extern int board_setup(void);
+
 int main(void) {
-
-    clock_setup();
-    gpio_setup();
-
+    int8_t status;
+    uint32_t loop;
     ow.usart = USART3;
 
+    /**
+     * Brief delay to give the debugger a chance to stop the core before we
+     * muck around with the chip's configuration.
+     */
+    for (loop = 0; loop < 1000000; ++loop) {
+        __asm__("nop");
+    }
+
+    board_setup();
+
+    /**
+     * Initialise OS and set up idle thread
+     */
+    status = atomOSInit(&thread_stacks[0][0], STACK_SIZE, FALSE);
+
+    if (status == ATOM_OK) {
+        /* Set up main thread */
+        status = atomThreadCreate(&main_tcb, THREAD_PRIO, main_thread_func, 0,
+                                  &thread_stacks[1][0], STACK_SIZE, TRUE);
+
+        if (status == ATOM_OK) {
+            atomOSStart();
+        }
+    }
+
+    while (1);
+
+    /* We will never get here */
+    return 0;
+}
+
+extern void test_led_toggle(void);
+
+static void main_thread_func(uint32_t data __maybe_unused) {
+    /* Print message */
+//    printf("Hello, world!\n");
+
+    /* Loop forever and blink the LED */
     bool readWrite = true;
     uint32_t pDelay, i;
 
@@ -95,20 +80,21 @@ int main(void) {
                 Temperature t;
                 switch (r->family) {
                     case DS18B20:
-                        t = readTemperature(&ow, &ow.ids[i], true); //it will return PREVIOUS value and will send new measure command
-                        printf("DS18B20 (SN: %x%x%x%x%x%x), Temp: %3d.%d \n", r->code[0], r->code[1], r->code[2],
-                               r->code[3], r->code[4], r->code[5], t.inCelsus, t.frac);
+                        t = readTemperature(&ow, &ow.ids[i],
+                                            true); //it will return PREVIOUS value and will send new measure command
+//                        printf("DS18B20 (SN: %x%x%x%x%x%x), Temp: %3d.%d \n", r->code[0], r->code[1], r->code[2],
+//                               r->code[3], r->code[4], r->code[5], t.inCelsus, t.frac);
                         break;
                     case DS18S20:
                         t = readTemperature(&ow, &ow.ids[i], true);
-                        printf("DS18S20 (SN: %x%x%x%x%x%x), Temp: %3d.%d \n", r->code[0], r->code[1], r->code[2],
-                               r->code[3], r->code[4], r->code[5], t.inCelsus, t.frac);
+//                        printf("DS18S20 (SN: %x%x%x%x%x%x), Temp: %3d.%d \n", r->code[0], r->code[1], r->code[2],
+//                               r->code[3], r->code[4], r->code[5], t.inCelsus, t.frac);
                         break;
                     case 0x00:
                         break;
                     default:
-                        printf("UNKNOWN Family:%x (SN: %x%x%x%x%x%x)\n", r->family, r->code[0], r->code[1], r->code[2],
-                               r->code[3], r->code[4], r->code[5]);
+//                        printf("UNKNOWN Family:%x (SN: %x%x%x%x%x%x)\n", r->family, r->code[0], r->code[1], r->code[2],
+//                               r->code[3], r->code[4], r->code[5]);
                         break;
                 }
                 pDelay = 1200000;
@@ -119,13 +105,12 @@ int main(void) {
         //do something while sensor calculate
         int k = 10;
         while (k > 0) {
-            gpio_toggle(GPIOC, GPIO13);    /* LED on/off */
+            test_led_toggle();
             for (i = 0; i < pDelay; i++)    /* Wait a bit. */
                     __asm__("nop");
             k--;
         }
         readWrite = !readWrite;
+        atomTimerDelay(SYSTEM_TICKS_PER_SEC);
     }
-
-    return 0;
 }

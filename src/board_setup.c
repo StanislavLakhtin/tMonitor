@@ -1,4 +1,6 @@
 #include <stdbool.h>
+#include <stdio.h>
+#include <errno.h>
 
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/gpio.h>
@@ -9,30 +11,25 @@
 
 #include "atomport.h"
 
-/**
- * Set up USART2.
- * This one is connected via the virtual serial port on the Nucleo Board
- */
-static void usart_setup(uint32_t baud)
-{
-    rcc_periph_clock_enable(RCC_GPIOA);
-    rcc_periph_clock_enable(RCC_AFIO);
-    rcc_periph_clock_enable(RCC_USART2);
+#ifdef _STDIO_H_
 
-    usart_disable(USART2);
+#define USART_CONSOLE USART2
 
-    gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_ALTFN_PUSHPULL,
-                  GPIO_USART2_TX | GPIO_USART2_RX);
+int _write(int file, char *ptr, int len);
 
-    usart_set_baudrate(USART2, baud);
-    usart_set_databits(USART2, 8);
-    usart_set_stopbits(USART2, USART_STOPBITS_1);
-    usart_set_parity(USART2, USART_PARITY_NONE);
-    usart_set_flow_control(USART2, USART_FLOWCONTROL_NONE);
-    usart_set_mode(USART2, USART_MODE_TX_RX);
+int _write(int file, char *ptr, int len) {
+    int i;
 
-    usart_enable(USART2);
+    if (file == 1) {
+        for (i = 0; i < len; i++)
+            usart_send_blocking(USART_CONSOLE, ptr[i]);
+        return i;
+    }
+    errno = EIO;
+    return -1;
 }
+
+#endif
 
 /**
  * initialise and start SysTick counter. This will trigger the
@@ -54,28 +51,52 @@ static void systick_setup(void)
  */
 static void clock_setup(void)
 {
-    /* set core clock to 72MHz, generated from external 8MHz crystal */
     rcc_clock_setup_in_hse_8mhz_out_72mhz();
-}
 
-/**
- * Set up user LED and provide function for toggling it. This is for
- * use by the test suite programs
- */
-static void test_led_setup(void)
-{
-    /* LED is connected to GPIO5 on port A */
+    /* Enable GPIOB, GPIOC, and AFIO clocks. */
     rcc_periph_clock_enable(RCC_GPIOA);
+    rcc_periph_clock_enable(RCC_GPIOB);
+    rcc_periph_clock_enable(RCC_GPIOC);
 
-    gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ,
-                  GPIO_CNF_OUTPUT_PUSHPULL, GPIO5);
+    rcc_periph_clock_enable(RCC_AFIO);
 
-    gpio_set(GPIOA, GPIO5);
+    /* Enable clocks for USARTs. */
+    rcc_periph_clock_enable(RCC_USART2); //включить, если используется отладка
+#ifdef ONEWIRE_USART3
+    rcc_periph_clock_enable(RCC_USART3);
+#endif
 }
+
 
 void test_led_toggle(void)
 {
     gpio_toggle(GPIOA, GPIO5);
+}
+
+static void gpio_setup(void) {
+    gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_10_MHZ,
+                  GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO_USART2_TX | GPIO_USART2_RX);
+
+    gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_10_MHZ,
+                  GPIO_CNF_OUTPUT_ALTFN_OPENDRAIN, GPIO_USART3_TX | GPIO_USART3_RX);
+
+    gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_2_MHZ,
+                  GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
+
+    AFIO_MAPR |= AFIO_MAPR_SWJ_CFG_FULL_SWJ_NO_JNTRST;
+
+    /* Preconf USART2 for output*/
+    // Настраиваем
+    usart_set_baudrate(USART_CONSOLE, 115200);
+    usart_set_databits(USART_CONSOLE, 8);
+    usart_set_stopbits(USART_CONSOLE, USART_STOPBITS_1);
+    usart_set_mode(USART_CONSOLE, USART_MODE_TX_RX);
+    usart_set_parity(USART_CONSOLE, USART_PARITY_NONE);
+    usart_set_flow_control(USART_CONSOLE, USART_FLOWCONTROL_NONE);
+    usart_enable(USART_CONSOLE);
+
+    /* Preconf LED. */
+    gpio_clear(GPIOC, GPIO13);
 }
 
 /**
@@ -92,8 +113,7 @@ int board_setup(void)
 
     /* configure system clock, user LED and UART */
     clock_setup();
-    test_led_setup();
-    usart_setup(115200);
+    gpio_setup();
 
     /* initialise SysTick counter */
     systick_setup();

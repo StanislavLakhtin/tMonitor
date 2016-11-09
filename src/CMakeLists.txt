@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 3.0)
 
 #Переделать здесь, чтобы не ссылаться на относительные пути для поиска OneWire -- некрасиво
-file(GLOB_RECURSE USER_SOURCES ./*.c ./*.cpp ../lib/onewire/src/*.c)
+file(GLOB USER_SOURCES ./*.c ./*.cpp
+        ${ONEWIRE_ROOT}/src/*.c
+        ${ATOMTHREADS}/kernel/*.c
+        ${ATOMTHREADS_PORTROOT}/*.S
+        ${ATOMTHREADS_PORTROOT}/*.c)
 
 add_executable(${PROJECT_NAME}.elf ${USER_SOURCES})
 
