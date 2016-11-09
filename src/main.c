@@ -25,7 +25,7 @@ extern int board_setup(void);
 int main(void) {
     int8_t status;
     uint32_t loop;
-    
+
     /**
      * Brief delay to give the debugger a chance to stop the core before we
      * muck around with the chip's configuration.
@@ -109,7 +109,6 @@ static void main_thread_func(uint32_t data __maybe_unused) {
         //do something while sensor calculate
         int k = 10;
         while (k > 0) {
-            test_led_toggle();
             for (i = 0; i < pDelay; i++)    /* Wait a bit. */
                     __asm__("nop");
             k--;

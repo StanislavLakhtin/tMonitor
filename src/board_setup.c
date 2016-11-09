@@ -13,9 +13,7 @@
 
 #ifdef _STDIO_H_
 
-#define USART_CONSOLE USART2
-
-int _write(int file, char *ptr, int len);
+#define USART_CONSOLE USART1
 
 int _write(int file, char *ptr, int len) {
     int i;
@@ -39,9 +37,7 @@ int _write(int file, char *ptr, int len) {
 static void systick_setup(void)
 {
     systick_set_frequency(SYSTEM_TICKS_PER_SEC, 72000000);
-
     systick_interrupt_enable();
-
     systick_counter_enable();
 }
 
@@ -68,14 +64,9 @@ static void clock_setup(void)
 }
 
 
-void test_led_toggle(void)
-{
-    gpio_toggle(GPIOA, GPIO5);
-}
-
 static void gpio_setup(void) {
     gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_10_MHZ,
-                  GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO_USART2_TX | GPIO_USART2_RX);
+                  GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO_ALL);
 
     gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_10_MHZ,
                   GPIO_CNF_OUTPUT_ALTFN_OPENDRAIN, GPIO_USART3_TX | GPIO_USART3_RX);
@@ -84,16 +75,6 @@ static void gpio_setup(void) {
                   GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
 
     AFIO_MAPR |= AFIO_MAPR_SWJ_CFG_FULL_SWJ_NO_JNTRST;
-
-    /* Preconf USART2 for output*/
-    // Настраиваем
-    usart_set_baudrate(USART_CONSOLE, 115200);
-    usart_set_databits(USART_CONSOLE, 8);
-    usart_set_stopbits(USART_CONSOLE, USART_STOPBITS_1);
-    usart_set_mode(USART_CONSOLE, USART_MODE_TX_RX);
-    usart_set_parity(USART_CONSOLE, USART_PARITY_NONE);
-    usart_set_flow_control(USART_CONSOLE, USART_FLOWCONTROL_NONE);
-    usart_enable(USART_CONSOLE);
 
     /* Preconf LED. */
     gpio_clear(GPIOC, GPIO13);
