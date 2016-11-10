@@ -11,6 +11,7 @@ add_definitions(-DSTM32F1)
 
 set(ATOMTHREADS ${CMAKE_SOURCE_DIR}/lib/atomthreads)
 set(ATOMTHREADS_PORTROOT ${ATOMTHREADS}/ports/cortex-m)
+set(KS0108_ROOT ${CMAKE_SOURCE_DIR}/lib/ks0108)
 
 set(LIBOPENCM3_ROOT ${ATOMTHREADS_PORTROOT}/libopencm3)
 set(ONEWIRE_ROOT ${CMAKE_SOURCE_DIR}/lib/onewire)
@@ -22,6 +23,7 @@ include_directories(
         ${ATOMTHREADS}/kernel
         ${ATOMTHREADS_PORTROOT}
         ${ONEWIRE_ROOT}/src
+        ${KS0108_ROOT}
         inc)
 
 link_directories(
