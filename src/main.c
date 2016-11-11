@@ -8,6 +8,7 @@
 #define MAXDEVICES_ON_THE_BUS 3
 
 #include "OneWire.h"
+#include "ks0108.h"
 
 #define STACK_SIZE      1024
 #define THREAD_PRIO     42
@@ -17,8 +18,8 @@ static ATOM_TCB main_tcb;
 static uint8_t thread_stacks[2][STACK_SIZE];
 
 static void main_thread_func(uint32_t data);
-
-
+static void paint_pixels_thread_func(uint32_t data);
+static void draw_screen_thread_func(uint32_t data);
 
 extern int board_setup(void);
 
@@ -43,7 +44,11 @@ int main(void) {
 
     if (status == ATOM_OK) {
         /* Set up main thread */
-        status = atomThreadCreate(&main_tcb, THREAD_PRIO, main_thread_func, 0,
+//        status = atomThreadCreate(&main_tcb, THREAD_PRIO, main_thread_func, 0,
+//                                  &thread_stacks[1][0], STACK_SIZE, TRUE);
+        status = atomThreadCreate(&main_tcb, THREAD_PRIO, paint_pixels_thread_func, 0,
+                                  &thread_stacks[1][0], STACK_SIZE, TRUE);
+        status |= atomThreadCreate(&main_tcb, THREAD_PRIO, draw_screen_thread_func, 0,
                                   &thread_stacks[1][0], STACK_SIZE, TRUE);
 
         if (status == ATOM_OK) {
@@ -56,8 +61,6 @@ int main(void) {
     /* We will never get here */
     return 0;
 }
-
-extern void test_led_toggle(void);
 
 static void main_thread_func(uint32_t data __maybe_unused) {
     OneWire ow;
@@ -114,6 +117,21 @@ static void main_thread_func(uint32_t data __maybe_unused) {
             k--;
         }
         readWrite = !readWrite;
+        atomTimerDelay(SYSTEM_TICKS_PER_SEC);
+    }
+}
+
+static void paint_pixels_thread_func(uint32_t data __maybe_unused) {
+    while(1) {
+
+        atomTimerDelay(SYSTEM_TICKS_PER_SEC);
+    }
+}
+
+static void draw_screen_thread_func(uint32_t data __maybe_unused) {
+    ks0108_init();
+    while (1) {
+        ks0108_repaint();
         atomTimerDelay(SYSTEM_TICKS_PER_SEC);
     }
 }
