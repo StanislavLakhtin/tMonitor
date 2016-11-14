@@ -45,7 +45,7 @@ typedef union registerGpio frame;
 
 void ks0108_init();
 void ks0108_send(frame);
-static void delayMs(uint32_t mks);
+void delayMs(uint32_t mks);
 frame readPort();
 void drawPixel(uint8_t x, uint8_t y, uint8_t color);
 

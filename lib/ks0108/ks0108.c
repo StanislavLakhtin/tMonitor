@@ -17,7 +17,7 @@ void ks0108_init() {
 }
 
 /* sleep for delay milliseconds */
-static void delayMs(uint32_t mks) {
+void delayMs(uint32_t mks) {
     uint32_t t = 0;
     uint32_t delay = 720 * mks; //todo переделать потом от частоты и таймеры
     for (t = 0; t < delay; t++)
@@ -54,7 +54,7 @@ void drawPixel(uint8_t x, uint8_t y, uint8_t color) {
         buffer[page * 64 + x] &= !(y % 8) << 1;
 }
 
-void repaint() {
+void ks0108_repaint() {
     uint8_t page = 0, CS, p;
     frame f;
     while (page < 16) {

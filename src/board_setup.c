@@ -56,8 +56,6 @@ static void clock_setup(void)
 
     rcc_periph_clock_enable(RCC_AFIO);
 
-    /* Enable clocks for USARTs. */
-    rcc_periph_clock_enable(RCC_USART2); //включить, если используется отладка
 #ifdef ONEWIRE_USART3
     rcc_periph_clock_enable(RCC_USART3);
 #endif
@@ -65,8 +63,8 @@ static void clock_setup(void)
 
 
 static void gpio_setup(void) {
-    gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_10_MHZ,
-                  GPIO_CNF_INPUT_FLOAT, GPIO_ALL);
+    gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ,
+                  GPIO_CNF_OUTPUT_PUSHPULL, GPIO_ALL);
 
     gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_10_MHZ,
                   GPIO_CNF_OUTPUT_ALTFN_OPENDRAIN, GPIO_USART3_TX | GPIO_USART3_RX);
