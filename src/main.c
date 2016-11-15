@@ -69,7 +69,7 @@ static void paint_pixels_thread_func(uint32_t data __maybe_unused) {
             drawPixel(x, y, WHITE);
         }
         ks0108_repaint();*/
-        //gpio_toggle(GPIOA, 0xff);
-        atomTimerDelay(SYSTEM_TICKS_PER_SEC);
+        gpio_toggle(GPIOA, 0xff);
+        atomTimerDelay(1); //SYSTEM_TICKS_PER_SEC
     }
 }
