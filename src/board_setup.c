@@ -1,13 +1,13 @@
-#include <stdbool.h>
-#include <stdio.h>
-#include <errno.h>
+//#include <stdbool.h>
+//#include <stdio.h>
+//#include <errno.h>
 
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/usart.h>
 #include <libopencm3/cm3/systick.h>
-#include <libopencm3/cm3/cortex.h>
-#include <libopencm3/cm3/nvic.h>
+//#include <libopencm3/cm3/cortex.h>
+//#include <libopencm3/cm3/nvic.h>
 
 #include "atomport.h"
 
@@ -30,18 +30,6 @@ int _write(int file, char *ptr, int len) {
 #endif
 
 /**
- * initialise and start SysTick counter. This will trigger the
- * sys_tick_handler() periodically once interrupts have been enabled
- * by archFirstThreadRestore()
- */
-static void systick_setup(void)
-{
-    systick_set_frequency(SYSTEM_TICKS_PER_SEC, 72000000);
-    systick_interrupt_enable();
-    systick_counter_enable();
-}
-
-/**
  * Set up the core clock to something other than the internal 16MHz PIOSC.
  * Make sure that you use the same clock frequency in  systick_setup().
  */
@@ -49,12 +37,9 @@ static void clock_setup(void)
 {
     rcc_clock_setup_in_hse_8mhz_out_72mhz();
 
-    /* Enable GPIOB, GPIOC, and AFIO clocks. */
     rcc_periph_clock_enable(RCC_GPIOA);
     rcc_periph_clock_enable(RCC_GPIOB);
     rcc_periph_clock_enable(RCC_GPIOC);
-
-    rcc_periph_clock_enable(RCC_AFIO);
 
 #ifdef ONEWIRE_USART3
     rcc_periph_clock_enable(RCC_USART3);
@@ -63,7 +48,7 @@ static void clock_setup(void)
 
 
 static void gpio_setup(void) {
-    gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ,
+    gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_10_MHZ,
                   GPIO_CNF_OUTPUT_PUSHPULL, GPIO_ALL);
 
     gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_10_MHZ,
@@ -73,9 +58,6 @@ static void gpio_setup(void) {
                   GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
 
     AFIO_MAPR |= AFIO_MAPR_SWJ_CFG_FULL_SWJ_NO_JNTRST;
-
-    /* Preconf LED. */
-    gpio_clear(GPIOC, GPIO13);
 }
 
 /**
@@ -88,20 +70,20 @@ int board_setup(void)
      * not be called before the first thread has been started.
      * Interrupts will be enabled by archFirstThreadRestore().
      */
-    cm_mask_interrupts(true);
+//    cm_mask_interrupts(true);
 
     /* configure system clock, user LED and UART */
     clock_setup();
     gpio_setup();
 
     /* initialise SysTick counter */
-    systick_setup();
+//    systick_setup();
 
     /* Set exception priority levels. Make PendSv the lowest priority and
      * SysTick the second to lowest
      */
-    nvic_set_priority(NVIC_PENDSV_IRQ, 0xFF);
-    nvic_set_priority(NVIC_SYSTICK_IRQ, 0xFE);
+//    nvic_set_priority(NVIC_PENDSV_IRQ, 0xFF);
+//    nvic_set_priority(NVIC_SYSTICK_IRQ, 0xFE);
 
     return 0;
 }

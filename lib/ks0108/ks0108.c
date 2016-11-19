@@ -7,9 +7,10 @@ void ks0108_init() {
     frame f;
     f.port = RESET;
     ks0108_send(f); //we MUST wait at least 1 mks after that we should wait busy/reset clear in ic or wait 10 mks
-    do {
+    /*do {
         f = readPort();
-    } while (f.port.db & 0x90);
+    } while (f.port.db & 0x90);*/
+    delayMs(10);
     f.port = DISPLAY_ON;
     ks0108_send(f);
     f.port = START_LINE;
@@ -21,20 +22,18 @@ void delayMs(uint32_t mks) {
     uint32_t t = 0;
     uint32_t delay = 720 * mks; //todo переделать потом от частоты и таймеры
     for (t = 0; t < delay; t++)
-            __asm__("nop");
+        __asm__("nop");
 }
 
 void ks0108_send(frame f) {
-    frame clr;
-    clr.port = CLEAR;
     gpio_set(GPIOA, f.data);
     delayMs(1);
-    gpio_set(GPIOA, clr.data);
+    gpio_set(GPIOA, 0xFF);
 }
 
 frame readPort() {
     frame r;
-    gpio_port_read(r.data);
+    r.data = gpio_port_read(GPIOA);
     return r;
 }
 
