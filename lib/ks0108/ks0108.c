@@ -20,15 +20,20 @@ void ks0108_init() {
 /* sleep for delay milliseconds */
 void delayMs(uint32_t mks) {
     uint32_t t = 0;
-    uint32_t delay = 720 * mks; //todo переделать потом от частоты и таймеры
+    uint32_t delay = 700 * mks; //todo переделать потом от частоты и таймеры
     for (t = 0; t < delay; t++)
         __asm__("nop");
 }
 
-void ks0108_send(frame f) {
-    gpio_set(GPIOA, f.data);
+void gpioChange(uint16_t data){
+    gpio_clear(GPIOB, GPIO4);
+    gpio_port_write(GPIOA, data);
     delayMs(1);
-    gpio_set(GPIOA, 0xFF);
+    gpio_set(GPIOB, GPIO4);
+}
+
+void ks0108_send(frame f) {
+    gpioChange(f.data);
 }
 
 frame readPort() {

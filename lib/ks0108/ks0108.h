@@ -33,7 +33,6 @@ union registerGpio {
 
 //                               en .. a0 rw res cs   DB7-0
 #define RESET       (ks0108Port){ 0, 0, 0, 1, 0, E12, 0x00}
-#define CLEAR       (ks0108Port){ 1, 0, 0, 0, 1, E12, 0x00}
 #define DISPLAY_ON  (ks0108Port){ 0, 0, 0, 0, 1, E12, 0x3F}
 #define DISPLAY_OFF (ks0108Port){ 0, 0, 0, 0, 1, E12, 0x3E}
 #define START_LINE  (ks0108Port){ 0, 0, 0, 0, 1, E12, 0xC0}

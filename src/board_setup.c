@@ -48,7 +48,7 @@ static void clock_setup(void)
 
 
 static void gpio_setup(void) {
-    gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_10_MHZ,
+    gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ,
                   GPIO_CNF_OUTPUT_PUSHPULL, GPIO_ALL);
 
     gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_10_MHZ,
@@ -56,8 +56,6 @@ static void gpio_setup(void) {
 
     gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_2_MHZ,
                   GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
-
-    AFIO_MAPR |= AFIO_MAPR_SWJ_CFG_FULL_SWJ_NO_JNTRST;
 }
 
 /**
