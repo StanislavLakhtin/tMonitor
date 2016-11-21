@@ -18,20 +18,26 @@ int main(void) {
 
     board_setup();
     int seed;
-    ks0108_init();
+    //
 
     while (1) {
         gpio_toggle(GPIOC, GPIO13); //blink led
 
-        int x,y,i;
+        /*int i;
+        for (i=0; i<16; i++) {
+            gpio_port_write(GPIOA, 0xffff);
+            gpio_clear(GPIOA, 1<<i);
+        }*/
+
+        /*uint16_t x,y,i;
         for (i = 0; i < 10000; ++ i ) {
             seed = rand();
             x = abs(seed % 128);
             y = abs(seed % 64);
             drawPixel(x, y, WHITE);
-        }
-        ks0108_repaint();
-        //gpio_toggle(GPIOA, 0xffff);
+        }*/
+        ks0108_init();
+        //ks0108_repaint();
         delayMs(2000);
     }
 

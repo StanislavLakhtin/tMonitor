@@ -4,42 +4,28 @@
 #include "ks0108.h"
 
 void ks0108_init() {
-    frame f;
-    f.port = RESET;
-    ks0108_send(f); //we MUST wait at least 1 mks after that we should wait busy/reset clear in ic or wait 10 mks
+    ks0108_send(INIT); //we MUST wait at least 1 mks after that we should wait busy/reset clear in ic or wait 10 mks
     /*do {
         f = readPort();
     } while (f.port.db & 0x90);*/
-    delayMs(10);
-    f.port = DISPLAY_ON;
-    ks0108_send(f);
-    f.port = START_LINE;
-    ks0108_send(f);
+    delayMs(20);
+    ks0108_send(DISPLAY_ON);
+    ks0108_send(START_LINE);
 }
 
 /* sleep for delay milliseconds */
 void delayMs(uint32_t mks) {
     uint32_t t = 0;
-    uint32_t delay = 700 * mks; //todo переделать потом от частоты и таймеры
+    uint32_t delay = 5000 * mks; //todo переделать потом от частоты и таймеры
     for (t = 0; t < delay; t++)
         __asm__("nop");
 }
 
-void gpioChange(uint16_t data){
-    gpio_clear(GPIOB, GPIO4);
+void ks0108_send(uint16_t data){
     gpio_port_write(GPIOA, data);
-    delayMs(1);
-    gpio_set(GPIOB, GPIO4);
-}
-
-void ks0108_send(frame f) {
-    gpioChange(f.data);
-}
-
-frame readPort() {
-    frame r;
-    r.data = gpio_port_read(GPIOA);
-    return r;
+    delayMs(2);
+    gpio_port_write(GPIOA, CLEAR);
+    delayMs(8);
 }
 
 void drawPixel(uint8_t x, uint8_t y, uint8_t color) {
@@ -59,7 +45,7 @@ void drawPixel(uint8_t x, uint8_t y, uint8_t color) {
 }
 
 void ks0108_repaint() {
-    uint8_t page = 0, CS, p;
+    /*uint8_t page = 0, CS, p;
     frame f;
     while (page < 16) {
         if (page < 8 ) {
@@ -86,6 +72,6 @@ void ks0108_repaint() {
             pos++;
         }
         page++;
-    }
+    }*/
 }
 
