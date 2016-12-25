@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/sl/projects/tMonitor/lib/atomthreads/ports/cortex-m/asm_offsets.h
+
+/home/sl/projects/tMonitor/lib/atomthreads/ports/cortex-m/atomport-asm.S
+asm_offsets.h
+/home/sl/projects/tMonitor/lib/atomthreads/ports/cortex-m/asm_offsets.h
+
