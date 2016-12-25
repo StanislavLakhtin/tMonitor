@@ -51,12 +51,16 @@ static void gpio_setup(void) {
     gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ,
                   GPIO_CNF_OUTPUT_PUSHPULL, GPIO_ALL);
 
-    gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_10_MHZ,
+    gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ,
                   GPIO_CNF_OUTPUT_ALTFN_OPENDRAIN, GPIO_USART3_TX | GPIO_USART3_RX);
+
+    gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ,
+                  GPIO_CNF_OUTPUT_PUSHPULL, GPIO0); //RESET PIN
 
     gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_2_MHZ,
                   GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
 
+    gpio_set(GPIOB, GPIO0);
     gpio_port_write(GPIOA, 0xffff);
 }
 

@@ -15,10 +15,9 @@
 uint8_t buffer[1024];
 
 /*
- * (.. E A0 ..)  (.. R/W E2 E1)
+ * (.. A0 ..)  (.. R/W E E2 E1)
  * DB0-DB7 */
 
-#define INIT 0x0000
 #define DISPLAY_ON 0x033f
 #define START_LINE 0x03A0
 #define CLEAR 0xffff

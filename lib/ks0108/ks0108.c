@@ -4,10 +4,12 @@
 #include "ks0108.h"
 
 void ks0108_init() {
-    ks0108_send(INIT); //we MUST wait at least 1 mks after that we should wait busy/reset clear in ic or wait 10 mks
+    gpio_clear(GPIOB, GPIO0); //we MUST wait at least 1 mks after that we should wait busy/reset clear in ic or wait 10 mks
     /*do {
         f = readPort();
     } while (f.port.db & 0x90);*/
+    delayMs(2);
+    gpio_set(GPIOB, GPIO0);
     delayMs(20);
     ks0108_send(DISPLAY_ON);
     ks0108_send(START_LINE);
