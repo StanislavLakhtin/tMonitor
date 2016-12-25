@@ -1,8 +1,0 @@
-/home/sl/projects/tMonitor/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/sl/projects/tMonitor/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/sl/projects/tMonitor/cmake-build-debug/CMakeFiles/atomthreads.dir
-/home/sl/projects/tMonitor/cmake-build-debug/CMakeFiles/libopencm3.dir
-/home/sl/projects/tMonitor/cmake-build-debug/src/CMakeFiles/edit_cache.dir
-/home/sl/projects/tMonitor/cmake-build-debug/src/CMakeFiles/rebuild_cache.dir
-/home/sl/projects/tMonitor/cmake-build-debug/src/CMakeFiles/tMonitor.bin.dir
-/home/sl/projects/tMonitor/cmake-build-debug/src/CMakeFiles/tMonitor.elf.dir
