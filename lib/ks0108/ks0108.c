@@ -47,33 +47,6 @@ void drawPixel(uint8_t x, uint8_t y, uint8_t color) {
 }
 
 void ks0108_repaint() {
-    /*uint8_t page = 0, CS, p;
-    frame f;
-    while (page < 16) {
-        if (page < 8 ) {
-            CS = E1;
-            p = page;
-        } else {
-            CS = E2;
-            p = page - 8;
-        }
-        f.port = SET_PAGE;
-        f.port.cs = CS;
-        f.port.db |= p;
-        ks0108_send(f);
-        f.port = SET_ADDRESS;
-        f.port.cs = CS;
-        ks0108_send(f);
-        uint8_t pos = 0;
-        while (pos < 64) {
-            uint16_t b = page*64 + pos;
-            f.port = WRITE_RAM;
-            f.port.cs = CS;
-            f.port.db = buffer[b];
-            ks0108_send(f);
-            pos++;
-        }
-        page++;
-    }*/
+
 }
 
