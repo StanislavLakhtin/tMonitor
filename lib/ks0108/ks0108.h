@@ -14,9 +14,26 @@
 
 uint8_t buffer[1024];
 
+
+typedef struct _PortStruct
+{
+    uint8_t db: 8;
+    uint8_t chip:2;
+    uint8_t e:1;
+    uint8_t rw: 1;
+    uint8_t unused1: 1;
+    uint8_t a0: 1;
+    uint8_t unused0: 2;
+} PortStruct_t;
+
+typedef union _u_PortStruct {
+    PortStruct_t p;
+    uint16_t raw;
+} u_PortStruct_t;
+
 /*
- * (.. A0 ..)  (.. R/W E E2 E1)
- * DB7-DB0 */
+ * (.. A0 .. ..) (R/W E E2 E1)
+ * (DB7-DB0) */
 
 /*
  * MT12864J аналог KS0108 компании samsung
@@ -50,15 +67,18 @@ uint8_t buffer[1024];
  *
  */
 
-#define DISPLAY_ON 0x033f
-#define START_LINE 0x03A0
-#define CLEAR 0xffff
+static const u_PortStruct_t DISPLAY_ON = { {0x3f,0,0,0,0,0,0} };
+static const u_PortStruct_t START_LINE = { {0xc0,0,0,0,0,0,0} };
+static const u_PortStruct_t READSTATUS = { {0x00,0,0,1,0,0,0} };
 
-#define WHITE 0xff
+#define CLEAR 0x0000
+
+#define WHITE 0x00
 
 void ks0108_init();
-void ks0108_send(uint16_t);
+void ks0108_send(u_PortStruct_t);
 void delayMs(uint32_t mks);
+uint16_t ks0108_readStatus();
 void drawPixel(uint8_t x, uint8_t y, uint8_t color);
 
 void ks0108_repaint();

@@ -9,7 +9,7 @@
 //#include <libopencm3/cm3/cortex.h>
 //#include <libopencm3/cm3/nvic.h>
 
-#include "atomport.h"
+//#include "atomport.h"
 
 #ifdef _STDIO_H_
 
@@ -46,10 +46,19 @@ static void clock_setup(void)
 #endif
 }
 
+static void gpioA_readState(void) {
+    gpio_set_mode(GPIOA, GPIO_MODE_INPUT,
+                  GPIO_CNF_INPUT_FLOAT, GPIO7 | GPIO5 | GPIO4);
+}
 
-static void gpio_setup(void) {
+static void gpioA(void) {
     gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ,
                   GPIO_CNF_OUTPUT_PUSHPULL, GPIO_ALL);
+    gpio_clear(GPIOA, GPIO_ALL);
+}
+
+static void gpio_setup(void) {
+    gpioA();
 
     gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ,
                   GPIO_CNF_OUTPUT_ALTFN_OPENDRAIN, GPIO_USART3_TX | GPIO_USART3_RX);
@@ -61,8 +70,9 @@ static void gpio_setup(void) {
                   GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
 
     gpio_set(GPIOB, GPIO0);
-    gpio_port_write(GPIOA, 0xffff);
 }
+
+
 
 /**
  * Callback from your main program to set up the board's hardware before
