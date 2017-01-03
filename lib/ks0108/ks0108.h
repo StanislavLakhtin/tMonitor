@@ -78,7 +78,7 @@ static const u_PortStruct_t READSTATUS = { {0x00,0,0,1,0,0,0} };
 void ks0108_init();
 void ks0108_send(u_PortStruct_t);
 void delayMs(uint32_t mks);
-uint16_t ks0108_readStatus();
+uint16_t ks0108_readStatus(uint8_t);
 void drawPixel(uint8_t x, uint8_t y, uint8_t color);
 
 void ks0108_repaint();

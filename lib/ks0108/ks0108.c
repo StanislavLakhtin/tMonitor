@@ -20,13 +20,13 @@ void ks0108_init() {
         cmd = START_LINE;
         cmd.p.chip = (uint8_t) t;
         ks0108_send(cmd);
-        delay = 50;
+        delay = 80;
         while (delay--)
                 __asm__("nop");
         cmd = DISPLAY_ON;
         cmd.p.chip = (uint8_t) t;
         ks0108_send(cmd);
-        delay = 50;
+        delay = 80;
         while (delay--)
                 __asm__("nop");
     }
@@ -42,13 +42,11 @@ void delayMs(uint32_t mks) {
 void ks0108_send(u_PortStruct_t d) {
     d.p.e = 0;
     gpio_port_write(GPIOA, d.raw);
-    __asm__("nop");
     d.p.e = 1;
-    gpio_set(GPIOA, GPIO10);
-    uint16_t delay = 1;
-    while (delay--)
-            __asm__("nop");
-    gpio_clear(GPIOA, GPIO10);
+    gpio_port_write(GPIOA, d.raw);
+    __asm__("nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;");
+    d.p.e = 0;
+    gpio_port_write(GPIOA, d.raw);
     gpio_clear(GPIOA, GPIO_ALL);
 }
 
@@ -68,26 +66,41 @@ void drawPixel(uint8_t x, uint8_t y, uint8_t color) {
         buffer[page * 64 + x] &= !(y % 8) << 1;
 }
 
-uint16_t ks0108_readStatus() {
-    ks0108_send(READSTATUS);
+uint16_t ks0108_readStatus(uint8_t chip) {
+    //перевести пины (0-8) в состояние входов
+    u_PortStruct_t cmd = READSTATUS;
+    cmd.p.chip = chip;
+    ks0108_send(cmd);
+    uint8_t delay = 3;
+    while (delay--)
+        __asm__("nop");
     return gpio_get(GPIOA, GPIO_ALL);
 }
 
 void ks0108_repaint() {
-    uint8_t chip, page, address;
+    uint8_t chip, page, address, delay;
     u_PortStruct_t cmd;
     //set chip
     for (chip = 1; chip < 3; chip++) {
         cmd.p.chip = chip;
+        delay = 255;
+        while (delay--)
+                __asm__("nop");
         for (page = 0; page < 8; page++) {
             //setpage and address
-            cmd.p.db = (uint8_t) 0xb8 | page;
+            cmd.p.db = (uint8_t) (page | 0xb8);
             cmd.p.a0 = 0;
             cmd.p.rw = 0;
             ks0108_send(cmd);
+            delay = 50;
+            while (delay--)
+                    __asm__("nop");
             cmd.p.db = 0x40;
             cmd.p.a0 = 0; cmd.p.rw = 0;
             ks0108_send(cmd);
+            delay = 50;
+            while (delay--)
+                    __asm__("nop");
             uint8_t data;
             for (address = 0; address < 64; address++) {
                 cmd.p.a0 = 1; cmd.p.rw = 0;
@@ -95,6 +108,9 @@ void ks0108_repaint() {
                 cmd.p.db = data;
                 ks0108_send(cmd);
             }
+            delay = 50;
+            while (delay--)
+                    __asm__("nop");
         }
     }
 }
