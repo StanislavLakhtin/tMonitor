@@ -21,9 +21,8 @@ typedef struct _PortStruct
     uint8_t chip:2;
     uint8_t e:1;
     uint8_t rw: 1;
-    uint8_t unused1: 1;
     uint8_t a0: 1;
-    uint8_t unused0: 2;
+    uint8_t unused0: 3;
 } PortStruct_t;
 
 typedef union _u_PortStruct {
@@ -64,23 +63,23 @@ typedef union _u_PortStruct {
  * (E1) -- A8
  * (E2) -- A9
  *
- *
  */
 
-static const u_PortStruct_t DISPLAY_ON = { {0x3f,0,0,0,0,0,0} };
-static const u_PortStruct_t START_LINE = { {0xc0,0,0,0,0,0,0} };
-static const u_PortStruct_t READSTATUS = { {0x00,0,0,1,0,0,0} };
+static const u_PortStruct_t DISPLAY_ON = { {0x3f,0,0,0,0,0} };
+static const u_PortStruct_t START_LINE = { {0xc0,0,0,0,0,0} };
+static const u_PortStruct_t READSTATUS = { {0x00,0,0,1,0,0} };
 
 #define CLEAR 0x0000
 
 #define WHITE 0x00
+#define BLACK 0xff
 
 void ks0108_init();
 void ks0108_send(u_PortStruct_t);
 void delayMs(uint32_t mks);
-uint16_t ks0108_readStatus(uint8_t);
+void ks0108_waitReady(uint8_t);
 void drawPixel(uint8_t x, uint8_t y, uint8_t color);
 
-void ks0108_repaint();
+void ks0108_repaint(uint8_t mode);
 
 #endif //TMONITOR_KS0108_H

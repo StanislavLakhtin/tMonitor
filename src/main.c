@@ -20,16 +20,14 @@ int main(void) {
     ks0108_init();
 
     while (1) {
-        gpio_toggle(GPIOC, GPIO13); //blink led
 
-        /*uint16_t x,y, i,seed;
+        uint16_t x,y, i;
         for (i = 0; i < 10000; ++ i ) {
-            seed = rand();
-            x = abs(seed % 128);
-            y = abs(seed % 64);
-            drawPixel(x, y, WHITE);
-        }*/
-        ks0108_repaint();
+            x = (uint16_t) (rand() % 128);
+            y = (uint16_t) (rand() % 64);
+            drawPixel(x, y, BLACK);
+        }
+        ks0108_repaint(0);
     }
     /* В любых нормальных обстоятельствах мы никогда не попадём сюда */
     return 0;
