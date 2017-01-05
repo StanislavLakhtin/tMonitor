@@ -24,7 +24,10 @@ void ks0108_init() {
 
 void ks0108_send(u_PortStruct_t d) {
     gpio_clear(GPIOC, GPIO13); //blink led
-    ks0108_waitReady(d.p.cs);
+    //ks0108_waitReady(d.p.cs);
+    uint16_t delay = 40;
+    while (delay--)
+        __asm__("nop");
     d.p.e = 0;
     gpio_set(GPIOA, d.raw);
     d.p.e = 1;
@@ -40,7 +43,7 @@ void ks0108_waitReady(uint8_t chip) {
     //перевести пины (4,5,7) в состояние входов
     gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ,
                   GPIO_CNF_INPUT_PULL_UPDOWN, WAITRESETPIN | WAITONOFFPIN | WAITBUSYPIN);
-    GPIO_ODR(GPIOA) = WAITRESETPIN | WAITONOFFPIN | WAITBUSYPIN;
+    GPIO_ODR(GPIOA) = !(WAITRESETPIN | WAITONOFFPIN | WAITBUSYPIN);
     switch (chip) {
         case 1: gpio_set(GPIOA, CHIP1_PIN); break;
         case 2: gpio_set(GPIOA, CHIP2_PIN); break;
@@ -48,8 +51,8 @@ void ks0108_waitReady(uint8_t chip) {
     gpio_set(GPIOA, RWPIN);
     gpio_set(GPIOA, EPIN);
     __asm__("nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;");
-    while (GPIO_IDR(GPIOA) & 0x00ff) {
-        uint16_t flags = (uint16_t) (GPIO_IDR(GPIOA) & 0x00ff);
+    while (gpio_port_read(GPIOA) & 0x00ff) {
+        uint16_t flags = (uint16_t) (gpio_port_read(GPIOA) & 0x00ff);
         if (flags)
             gpio_set(GPIOC, GPIO13); //blink led
     }
