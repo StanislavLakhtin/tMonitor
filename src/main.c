@@ -19,8 +19,9 @@ int main(void) {
     board_setup();
     ks0108_init();
 
+    ks0108_repaint(0);
     while (1) {
-        ks0108_repaint(0);
+        ks0108_exp01();
     }
     /* В любых нормальных обстоятельствах мы никогда не попадём сюда */
     return 0;

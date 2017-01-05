@@ -37,8 +37,6 @@ static void clock_setup(void)
 {
     rcc_clock_setup_in_hse_8mhz_out_72mhz();
 
-    rcc_periph_clock_enable(RCC_AFIO);
-
     rcc_periph_clock_enable(RCC_GPIOA);
     rcc_periph_clock_enable(RCC_GPIOB);
     rcc_periph_clock_enable(RCC_GPIOC);
@@ -55,15 +53,13 @@ static void gpioA(void) {
 }
 
 static void gpio_setup(void) {
-    AFIO_MAPR |= AFIO_MAPR_SWJ_CFG_FULL_SWJ_NO_JNTRST;
-
     gpioA();
 
     gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ,
                   GPIO_CNF_OUTPUT_ALTFN_OPENDRAIN, GPIO_USART3_TX | GPIO_USART3_RX);
 
     gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ,
-                  GPIO_CNF_OUTPUT_PUSHPULL, GPIO0); //RESET PIN
+                  GPIO_CNF_OUTPUT_PUSHPULL, GPIO0); //LCD(KS0108) RESET PIN
 
     gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_2_MHZ,
                   GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);

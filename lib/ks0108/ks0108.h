@@ -54,7 +54,7 @@ typedef union _u_PortStruct {
  * подключение к stm32f103c8t6(bluepile):
  * (DB7-DB0) -- A7-A0
  * (RES) -- B0
- * (A0) -- A12
+ * (A0/RS) -- A12
  * (R/W) -- A11
  * (E) -- A10
  * (E1) -- A8
@@ -73,6 +73,7 @@ static const u_PortStruct_t READSTATUS = { {0x00,0,0,1,0,0} };
 
 #define RWPIN GPIO11
 #define EPIN  GPIO10
+#define RSPIN  GPIO12
 
 #define WAITBUSYPIN GPIO7
 #define WAITONOFFPIN GPIO5
@@ -82,10 +83,13 @@ static const u_PortStruct_t READSTATUS = { {0x00,0,0,1,0,0} };
 
 void ks0108_init();
 void ks0108_send(u_PortStruct_t);
+uint8_t ks0108_receive(uint8_t);
 void delayMs(uint32_t mks);
 void ks0108_waitReady(uint8_t);
 void drawPixel(uint8_t x, uint8_t y, uint8_t color);
 
 void ks0108_repaint(uint8_t mode);
+
+void ks0108_exp01();
 
 #endif //TMONITOR_KS0108_H
