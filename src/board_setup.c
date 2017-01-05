@@ -37,6 +37,8 @@ static void clock_setup(void)
 {
     rcc_clock_setup_in_hse_8mhz_out_72mhz();
 
+    rcc_periph_clock_enable(RCC_AFIO);
+
     rcc_periph_clock_enable(RCC_GPIOA);
     rcc_periph_clock_enable(RCC_GPIOB);
     rcc_periph_clock_enable(RCC_GPIOC);
@@ -46,11 +48,6 @@ static void clock_setup(void)
 #endif
 }
 
-static void gpioA_readState(void) {
-    gpio_set_mode(GPIOA, GPIO_MODE_INPUT,
-                  GPIO_CNF_INPUT_FLOAT, GPIO7 | GPIO5 | GPIO4);
-}
-
 static void gpioA(void) {
     gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ,
                   GPIO_CNF_OUTPUT_PUSHPULL, GPIO_ALL);
@@ -58,6 +55,8 @@ static void gpioA(void) {
 }
 
 static void gpio_setup(void) {
+    AFIO_MAPR |= AFIO_MAPR_SWJ_CFG_FULL_SWJ_NO_JNTRST;
+
     gpioA();
 
     gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ,

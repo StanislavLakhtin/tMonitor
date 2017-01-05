@@ -12,13 +12,10 @@
 #define set_bits(var,offset,length,value) ((*(var)&(0xffffffff ^ ((1<<length)-1)<<offset)) | value<<offset)
 // printf("g1 %x\n",set_bits(&v,4,16,0x3133));
 
-uint8_t buffer[1024];
-
-
 typedef struct _PortStruct
 {
     uint8_t db: 8;
-    uint8_t chip:2;
+    uint8_t cs:2;
     uint8_t e:1;
     uint8_t rw: 1;
     uint8_t a0: 1;
@@ -73,6 +70,15 @@ static const u_PortStruct_t READSTATUS = { {0x00,0,0,1,0,0} };
 
 #define WHITE 0x00
 #define BLACK 0xff
+
+#define RWPIN GPIO11
+#define EPIN  GPIO10
+
+#define WAITBUSYPIN GPIO7
+#define WAITONOFFPIN GPIO5
+#define WAITRESETPIN GPIO4
+#define CHIP1_PIN GPIO8
+#define CHIP2_PIN GPIO9
 
 void ks0108_init();
 void ks0108_send(u_PortStruct_t);

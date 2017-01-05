@@ -4,7 +4,6 @@
 #include "ks0108.h"
 
 void ks0108_init() {
-    uint16_t delay, t;
     gpio_clear(GPIOA, GPIO_ALL);
     gpio_clear(GPIOB, GPIO0); // RES = 0
     ks0108_waitReady(1);
@@ -12,96 +11,75 @@ void ks0108_init() {
     gpio_set(GPIOB, GPIO0); // RES = 1
     gpio_clear(GPIOA, GPIO_ALL);
     u_PortStruct_t cmd;
-    for (t = 1; t < 3; t++) {
+    uint16_t cs;
+    for (cs = 1; cs < 3; cs++) {
         cmd = START_LINE;
-        cmd.p.chip = (uint8_t) t;
-        ks0108_waitReady(cmd.p.chip);
+        cmd.p.cs = (uint8_t) cs;
         ks0108_send(cmd);
         cmd = DISPLAY_ON;
-        cmd.p.chip = (uint8_t) t;
-        ks0108_waitReady(cmd.p.chip);
+        cmd.p.cs = (uint8_t) cs;
         ks0108_send(cmd);
     }
-}
-
-/* sleep for delay milliseconds */
-void delayMs(uint32_t mks) {
-    uint32_t delay = 2048 * mks; //todo переделать потом от частоты и таймеры
-    while (delay--)
-            __asm__("nop");
 }
 
 void ks0108_send(u_PortStruct_t d) {
-    d.p.e = 0;
-    gpio_port_write(GPIOA, d.raw);
-    d.p.e = 1;
-    gpio_port_write(GPIOA, d.raw);
-    __asm__("nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;");
-    d.p.e = 0;
-    gpio_port_write(GPIOA, d.raw);
-    gpio_clear(GPIOA, GPIO_ALL);
     gpio_clear(GPIOC, GPIO13); //blink led
-}
-
-void drawPixel(uint8_t x, uint8_t y, uint8_t color) {
-    uint8_t page;
-    if (x < 64) {
-        page = 0;
-        x = 0;
-    } else {
-        page = 7;
-        x = x - 64;
-    }
-    page = page + y / 8;
-    if (color)
-        buffer[page * 64 + x] |= (y % 8) << 1;
-    else
-        buffer[page * 64 + x] &= !(y % 8) << 1;
+    ks0108_waitReady(d.p.cs);
+    d.p.e = 0;
+    gpio_set(GPIOA, d.raw);
+    d.p.e = 1;
+    gpio_set(GPIOA, d.raw);
+    __asm__("nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;");
+    gpio_clear(GPIOA, EPIN);
+    __asm__("nop;nop;nop;");
+    gpio_clear(GPIOA, GPIO_ALL);
 }
 
 void ks0108_waitReady(uint8_t chip) {
+    gpio_clear(GPIOA, GPIO_ALL);
     //перевести пины (4,5,7) в состояние входов
     gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ,
-                  GPIO_CNF_INPUT_PULL_UPDOWN, GPIO4 | GPIO5 | GPIO7);
-    u_PortStruct_t cmd = READSTATUS;
-    cmd.p.chip = chip;
-    cmd.p.e = 0;
-    gpio_port_write(GPIOA, cmd.raw);
-    cmd.p.e = 1;
-    gpio_port_write(GPIOA, cmd.raw);
-    while (gpio_get(GPIOA, GPIO4 | GPIO5 | GPIO7)) {
-        gpio_toggle(GPIOC, GPIO13); //blink led
+                  GPIO_CNF_INPUT_PULL_UPDOWN, WAITRESETPIN | WAITONOFFPIN | WAITBUSYPIN);
+    GPIO_ODR(GPIOA) = WAITRESETPIN | WAITONOFFPIN | WAITBUSYPIN;
+    switch (chip) {
+        case 1: gpio_set(GPIOA, CHIP1_PIN); break;
+        case 2: gpio_set(GPIOA, CHIP2_PIN); break;
     }
-    gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ,
-                  GPIO_CNF_OUTPUT_PUSHPULL, GPIO4 | GPIO5 | GPIO7);
+    gpio_set(GPIOA, RWPIN);
+    gpio_set(GPIOA, EPIN);
+    __asm__("nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;");
+    while (GPIO_IDR(GPIOA) & 0x00ff) {
+        uint16_t flags = (uint16_t) (GPIO_IDR(GPIOA) & 0x00ff);
+        if (flags)
+            gpio_set(GPIOC, GPIO13); //blink led
+    }
+    gpio_clear(GPIOA, EPIN);
+    __asm__("nop;nop;nop;nop;nop");
     gpio_clear(GPIOA, GPIO_ALL);
+    gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ,
+                  GPIO_CNF_OUTPUT_PUSHPULL, WAITRESETPIN | WAITONOFFPIN | WAITBUSYPIN);
 }
 
 void ks0108_repaint(uint8_t mode) {
-    uint8_t chip, page, address, delay;
+    uint8_t chip, page, address;
     u_PortStruct_t cmd;
-    //set chip
+    //set cs
     for (chip = 1; chip < 3; chip++) {
-        cmd.p.chip = chip;
-        ks0108_waitReady(cmd.p.chip);
-        delay = 255;
-        while (delay--)
-                __asm__("nop");
+        cmd.p.cs = chip;
         for (page = 0; page < 8; page++) {
             //setpage and address
             cmd.p.db = (uint8_t) (page | 0xb8);
             cmd.p.a0 = 0;
             cmd.p.rw = 0;
-            ks0108_waitReady(cmd.p.chip);
             ks0108_send(cmd);
             cmd.p.db = 0x40;
             cmd.p.a0 = 0; cmd.p.rw = 0;
-            ks0108_waitReady(cmd.p.chip);
             ks0108_send(cmd);
+            uint8_t p = 0x55;
             for (address = 0; address < 64; address++) {
                 cmd.p.a0 = 1; cmd.p.rw = 0;
-                cmd.p.db = buffer[page*64+address];
-                ks0108_waitReady(cmd.p.chip);
+                p = p==0x55?0xaa:0x55;
+                cmd.p.db = p;
                 ks0108_send(cmd);
             }
         }

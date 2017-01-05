@@ -20,13 +20,6 @@ int main(void) {
     ks0108_init();
 
     while (1) {
-
-        uint16_t x,y, i;
-        for (i = 0; i < 10000; ++ i ) {
-            x = (uint16_t) (rand() % 128);
-            y = (uint16_t) (rand() % 64);
-            drawPixel(x, y, BLACK);
-        }
         ks0108_repaint(0);
     }
     /* В любых нормальных обстоятельствах мы никогда не попадём сюда */
