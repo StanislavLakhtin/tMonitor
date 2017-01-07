@@ -86,10 +86,9 @@ void ks0108_send(u_PortStruct_t);
 uint8_t ks0108_receive(uint8_t);
 void delayMs(uint32_t mks);
 void ks0108_waitReady(uint8_t);
-void drawPixel(uint8_t x, uint8_t y, uint8_t color);
+void ks0108_drawPixel(uint8_t x, uint8_t y, uint8_t color);
 
 void ks0108_repaint(uint8_t mode);
-
-void ks0108_exp01();
+void ks0108_paint(uint8_t pattern);
 
 #endif //TMONITOR_KS0108_H
