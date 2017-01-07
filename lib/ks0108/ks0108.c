@@ -27,7 +27,10 @@ void ks0108_init() {
 
 void ks0108_send(u_PortStruct_t d) {
     gpio_clear(GPIOC, GPIO13); //blink led
-    ks0108_waitReady(d.p.cs);
+    //ks0108_waitReady(d.p.cs); не проверяем, а просто делаем паузу -- так быстрее
+    uint8_t delay = 40;
+    while(delay--)
+        __asm__("nop");
     d.p.e = 0;
     gpio_set(GPIOA, d.raw);
     d.p.e = 1;
