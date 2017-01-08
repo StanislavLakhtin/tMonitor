@@ -47,7 +47,7 @@ static void clock_setup(void)
 }
 
 static void gpioA(void) {
-    gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ,
+    gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_2_MHZ,
                   GPIO_CNF_OUTPUT_PUSHPULL, GPIO_ALL);
     gpio_clear(GPIOA, GPIO_ALL);
 }
