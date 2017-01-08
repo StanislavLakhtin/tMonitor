@@ -1,8 +1,8 @@
 //
 // Created by sl on 09.11.16.
 //
-#ifndef TMONITOR_KS0108_H
-#define TMONITOR_KS0108_H
+#ifndef TMONITOR_KS0108
+#define TMONITOR_KS0108
 
 #include <libopencm3/stm32/gpio.h>
 
@@ -64,7 +64,10 @@ typedef union _u_PortStruct {
 
 static const u_PortStruct_t DISPLAY_ON = { {0x3f,0,0,0,0,0} };
 static const u_PortStruct_t START_LINE = { {0xc0,0,0,0,0,0} };
-static const u_PortStruct_t READSTATUS = { {0x00,0,0,1,0,0} };
+static const u_PortStruct_t SET_PAGE   = { {0xb8,0,0,0,0,0} };
+static const u_PortStruct_t SET_ADDRESS= { {0x40,0,0,0,0,0} };
+static const u_PortStruct_t READ_STATUS= { {0x00,0,0,1,0,0} };
+static const u_PortStruct_t WRITE_DATA = { {0x00,0,0,0,1,0} };
 
 #define CLEAR 0x0000
 
@@ -82,13 +85,16 @@ static const u_PortStruct_t READSTATUS = { {0x00,0,0,1,0,0} };
 #define CHIP2_PIN GPIO9
 
 void ks0108_init();
-void ks0108_send(u_PortStruct_t);
-uint8_t ks0108_receive(uint8_t);
+void ks0108_sendCmdOrData(u_PortStruct_t);
 void delayMs(uint32_t mks);
 void ks0108_waitReady(uint8_t);
+void ks0108_setPage(uint8_t, uint8_t);
+void ks0108_setAddress(uint8_t, uint8_t);
+void ks0108_writeData(uint8_t, uint8_t);
+uint8_t ks0108_receiveData(uint8_t);
 void ks0108_drawPixel(uint8_t x, uint8_t y, uint8_t color);
 
 void ks0108_repaint(uint8_t mode);
 void ks0108_paint(uint8_t pattern);
 
-#endif //TMONITOR_KS0108_H
+#endif //TMONITOR_KS0108

@@ -9,3 +9,4 @@
 /libopencm3
 cmake-build-debug/
 build/
+tools/Pentacom2Header/out

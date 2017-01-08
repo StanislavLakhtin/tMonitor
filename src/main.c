@@ -4,8 +4,6 @@
 
 #include <libopencm3/stm32/rcc.h>
 
-#include <stdlib.h>
-
 #define ONEWIRE_USART3
 #define MAXDEVICES_ON_THE_BUS 3
 
@@ -13,36 +11,34 @@
 #include "ks0108.h"
 
 extern int board_setup(void);
+void shortDelay(uint32_t);
 void exp01();
 void exp02();
 
 int main(void) {
 
     board_setup();
-    ks0108_init();
 
-    uint32_t dd = 8000000;
     while (1) {
+        ks0108_init();
+
         ks0108_repaint(0);  //проверяем простую запись
-        uint32_t delay = dd;
-        while(delay--)
-            __asm__("nop");
+        shortDelay(8000000);
+
         exp01(); //проверяем чтение и перезапись прочитанного запись
-        delay = dd;
-        while(delay--)
-                __asm__("nop");
+        shortDelay(8000000);
         ks0108_paint(0);  //пишем простое число, например, 0 для стирания всего на экране
-        delay = dd;
-        while(delay--)
-                __asm__("nop");
+        shortDelay(8000000);
         exp02(); // спираль из точек
-        delay = dd;
-        while(delay--)
-                __asm__("nop");
+        shortDelay(8000000);
+        ks0108_paint(0); //очистили экран
+
     }
     /* В любых нормальных обстоятельствах мы никогда не попадём сюда */
     return 0;
 }
+
+
 
 void exp01() {
     uint8_t chip, page, address;
@@ -54,31 +50,31 @@ void exp01() {
             cmd.p.db = (uint8_t) (page | 0xb8);
             cmd.p.a0 = 0;
             cmd.p.rw = 0;
-            ks0108_send(cmd);
+            ks0108_sendCmdOrData(cmd);
             cmd.p.db = 0x40;
             cmd.p.a0 = 0;
             cmd.p.rw = 0;
-            ks0108_send(cmd);
+            ks0108_sendCmdOrData(cmd);
             uint8_t buffer[64];
-            ks0108_receive(chip); // ОБЯЗАТЕЛЬНОЕ ФИКТИВНОЕ ЧТЕНИЕ!
+            ks0108_receiveData(chip); // ОБЯЗАТЕЛЬНОЕ ФИКТИВНОЕ ЧТЕНИЕ!
             for (address = 0; address < 64; address++) {
-                buffer[address] = ks0108_receive(chip);
+                buffer[address] = ks0108_receiveData(chip);
             }
             cmd.p.db = (uint8_t) (page | 0xb8);
             cmd.p.a0 = 0;
             cmd.p.rw = 0;
-            ks0108_send(cmd);
+            ks0108_sendCmdOrData(cmd);
             cmd.p.db = 0x40;
             cmd.p.a0 = 0;
             cmd.p.rw = 0;
-            ks0108_send(cmd);
+            ks0108_sendCmdOrData(cmd);
             for (address = 0; address < 64; address++) {
                 cmd.p.a0 = 1;
                 cmd.p.rw = 0;
                 uint8_t p = buffer[address];
                 p = (p == 0x55) ? 0xaa : 0x55;
                 cmd.p.db = p;
-                ks0108_send(cmd);
+                ks0108_sendCmdOrData(cmd);
             }
         }
     }

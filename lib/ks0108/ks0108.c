@@ -2,6 +2,7 @@
 // Created by sl on 09.11.16.
 //
 #include "ks0108.h"
+#include "ks0108_font.h"
 
 void ks0108_init() {
     gpio_clear(GPIOA, GPIO_ALL);
@@ -18,19 +19,22 @@ void ks0108_init() {
     for (cs = 1; cs < 3; cs++) {
         cmd = START_LINE;
         cmd.p.cs = (uint8_t) cs;
-        ks0108_send(cmd);
+        ks0108_sendCmdOrData(cmd);
         cmd = DISPLAY_ON;
         cmd.p.cs = (uint8_t) cs;
-        ks0108_send(cmd);
+        ks0108_sendCmdOrData(cmd);
     }
 }
 
-void ks0108_send(u_PortStruct_t d) {
+void shortDelay(uint32_t delay) {
+    while (delay--)
+            __asm__("nop");
+}
+
+void ks0108_sendCmdOrData(u_PortStruct_t d) {
     gpio_clear(GPIOC, GPIO13); //blink led
     //ks0108_waitReady(d.p.cs); не проверяем, а просто делаем паузу -- так быстрее
-    uint8_t delay = 40;
-    while(delay--)
-        __asm__("nop");
+    shortDelay(40);
     d.p.e = 0;
     gpio_set(GPIOA, d.raw);
     d.p.e = 1;
@@ -41,10 +45,10 @@ void ks0108_send(u_PortStruct_t d) {
     gpio_clear(GPIOA, GPIO_ALL);
 }
 
-uint8_t ks0108_receive(uint8_t chip) {
+uint8_t ks0108_receiveData(uint8_t chip) {
     gpio_clear(GPIOC, GPIO13);
     gpio_set_mode(GPIOA, GPIO_MODE_INPUT,
-                  GPIO_CNF_INPUT_FLOAT, 0xff);
+                  GPIO_CNF_INPUT_PULL_UPDOWN, 0xff);
     gpio_set(GPIOA, RWPIN | RSPIN);
     switch (chip) {
         case 1:
@@ -69,8 +73,8 @@ void ks0108_waitReady(uint8_t chip) {
     gpio_clear(GPIOA, GPIO_ALL);
     //перевести пины (4,5,7) в состояние входов
     gpio_set_mode(GPIOA, GPIO_MODE_INPUT,
-                  GPIO_CNF_INPUT_FLOAT, WAITRESETPIN | WAITONOFFPIN | WAITBUSYPIN);
-    //GPIO_ODR(GPIOA) = !(WAITRESETPIN | WAITONOFFPIN | WAITBUSYPIN);
+                  GPIO_CNF_INPUT_PULL_UPDOWN, WAITRESETPIN | WAITONOFFPIN | WAITBUSYPIN);
+    GPIO_ODR(GPIOA) = !(WAITRESETPIN | WAITONOFFPIN | WAITBUSYPIN);
     switch (chip) {
         case 1:
             gpio_set(GPIOA, CHIP1_PIN);
@@ -96,27 +100,14 @@ void ks0108_waitReady(uint8_t chip) {
 
 void ks0108_repaint(uint8_t mode) {
     uint8_t chip, page, address;
-    u_PortStruct_t cmd;
-    //set cs
     for (chip = 1; chip < 3; chip++) {
-        cmd.p.cs = chip;
         for (page = 0; page < 8; page++) {
-            //setpage and address
-            cmd.p.db = (uint8_t) (page | 0xb8);
-            cmd.p.a0 = 0;
-            cmd.p.rw = 0;
-            ks0108_send(cmd);
-            cmd.p.db = 0x40;
-            cmd.p.a0 = 0;
-            cmd.p.rw = 0;
-            ks0108_send(cmd);
+            ks0108_setPage(chip, page);
+            ks0108_setAddress(chip, 0);
             uint8_t p = (uint8_t) ((mode == 0) ? 0x55 : 0xaa);
             for (address = 0; address < 64; address++) {
-                cmd.p.a0 = 1;
-                cmd.p.rw = 0;
                 p = (uint8_t) ((p == 0x55) ? 0xaa : 0x55);
-                cmd.p.db = p;
-                ks0108_send(cmd);
+                ks0108_writeData(chip, p);
             }
         }
     }
@@ -124,66 +115,100 @@ void ks0108_repaint(uint8_t mode) {
 
 void ks0108_paint(uint8_t pattern) {
     uint8_t chip, page, address;
-    u_PortStruct_t cmd;
-    //set cs
     for (chip = 1; chip < 3; chip++) {
-        cmd.p.cs = chip;
         for (page = 0; page < 8; page++) {
-            //setpage and address
-            cmd.p.db = (uint8_t) (page | 0xb8);
-            cmd.p.a0 = 0;
-            cmd.p.rw = 0;
-            ks0108_send(cmd);
-            cmd.p.db = 0x40;
-            cmd.p.a0 = 0;
-            cmd.p.rw = 0;
-            ks0108_send(cmd);
+            ks0108_setPage(chip, page);
+            ks0108_setAddress(chip, address);
             for (address = 0; address < 64; address++) {
-                cmd.p.a0 = 1;
-                cmd.p.rw = 0;
-                cmd.p.db = pattern;
-                ks0108_send(cmd);
+                ks0108_writeData(chip, pattern);
             }
         }
     }
 }
 
-void ks0108_drawPixel(uint8_t x, uint8_t y, uint8_t color) {
-    if ((x > 127) || (y > 63)) return;
-    u_PortStruct_t cmd;
-    uint8_t chip;
-    if (x < 64) {
-        gpio_set(GPIOA, CHIP1_PIN);
-        chip = 1;
-    } else {
-        gpio_set(GPIOA, CHIP2_PIN);
-        chip = 2;
-        x = x - 64;
+void ks0108_setPage(uint8_t chip, uint8_t page) {
+    ks0108_waitReady(chip);
+    gpio_clear(GPIOA, GPIO_ALL);
+    switch (chip) {
+        case 1:
+            gpio_set(GPIOA, CHIP1_PIN);
+            break;
+        case 2:
+            gpio_set(GPIOA, CHIP2_PIN);
+            break;
+    }
+    uint16_t data = (uint16_t) (page | 0x00b8);
+    //установить нужную страницу
+    gpio_set(GPIOA, data&0x00ff);
+    gpio_set(GPIOA, EPIN);
+    __asm__("nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;");
+    gpio_clear(GPIOA, EPIN);
+    __asm__("nop;nop;nop;");
+    gpio_clear(GPIOA, GPIO_ALL);
+}
+
+void ks0108_setAddress(uint8_t chip, uint8_t address) {
+    ks0108_waitReady(chip);
+    gpio_clear(GPIOA, GPIO_ALL);
+    switch (chip) {
+        case 1:
+            gpio_set(GPIOA, CHIP1_PIN);
+            break;
+        case 2:
+            gpio_set(GPIOA, CHIP2_PIN);
+            break;
+    }
+    uint16_t data = (uint16_t) (address | 0x40);
+    //установить нужную страницу
+    gpio_set(GPIOA, data&0x00ff);
+    gpio_set(GPIOA, EPIN);
+    __asm__("nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;");
+    gpio_clear(GPIOA, EPIN);
+    __asm__("nop;nop;nop;");
+    gpio_clear(GPIOA, GPIO_ALL);
+}
+
+void ks0108_writeData(uint8_t chip, uint8_t data) {
+    ks0108_waitReady(chip);
+    gpio_clear(GPIOA, GPIO_ALL);
+    switch (chip) {
+        case 1:
+            gpio_set(GPIOA, CHIP1_PIN);
+            break;
+        case 2:
+            gpio_set(GPIOA, CHIP2_PIN);
+            break;
     }
     //установить нужную страницу
-    cmd.p.cs = chip;
-    cmd.p.db = (uint8_t) (0xb8 | y >> 3);
-    cmd.p.a0 = 0;
-    cmd.p.rw = 0;
-    ks0108_send(cmd);
-    cmd.p.db = 0x40|x;
-    cmd.p.a0 = 0;
-    cmd.p.rw = 0;
-    ks0108_send(cmd);
-    ks0108_receive(chip); //фиктивное чтение (помещение данных в регистр-защёлку)
-    uint8_t current = ks0108_receive(chip);
-    uint8_t mask = 1<<(y&0x07);
+    gpio_set(GPIOA, data&0x00ff);
+    gpio_set(GPIOA, RSPIN);
+    gpio_set(GPIOA, EPIN);
+    __asm__("nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;");
+    gpio_clear(GPIOA, EPIN);
+    __asm__("nop;nop;nop;");
+    gpio_clear(GPIOA, GPIO_ALL);
+}
+
+void ks0108_drawPixel(uint8_t x, uint8_t y, uint8_t color) {
+    if ((x > 127) || (y > 63)) return;
+    uint8_t chip;
+    if (x < 64) {
+        chip = 1;
+    } else {
+        chip = 2;
+        x = (uint8_t) (x - 64);
+    }
+    uint8_t page = y >> 3;
+    ks0108_setPage(chip, page);
+    ks0108_setAddress(chip, x);
+    ks0108_receiveData(chip);
+    uint8_t current = ks0108_receiveData(chip);
+    uint8_t mask = 1 << (y & 0x07);
     if (color) {
         current |= mask;
     } else {
         current &= ~mask;
     }
-    cmd.p.db = 0x40|x;
-    cmd.p.a0 = 0;
-    cmd.p.rw = 0;
-    ks0108_send(cmd);
-    cmd.p.db = current;
-    cmd.p.a0 = 1;
-    cmd.p.rw = 0;
-    ks0108_send(cmd);
+    ks0108_setAddress(chip, x);
+    ks0108_writeData(chip, current);
 }
