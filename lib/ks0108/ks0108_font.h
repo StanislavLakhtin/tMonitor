@@ -2,10 +2,8 @@
 // создан автоматически на основании файла: FontFromPentacom.txt
 // файл может быть автометически сгенерирован снова. Будьте внимательны и, если внесли в него изменения, сохраните с другим именем
 
-
 #ifndef TMONITOR_KS0108_FONT
 #define TMONITOR_KS0108_FONT
-
 
 typedef struct {
     uint8_t size;
@@ -191,7 +189,7 @@ const Ks0108Char_t char_90={6, {0x00,0xc2,0xa2,0x92,0x8a,0x86}}; // Z
 const Ks0108Char_t char_91={3, {0x00,0x7e,0x42}}; // [
 
 // original was "92":[0,2,2,4,4,8,8,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_92={4, {0x00,0x06,0x18,0x60}}; //backslash
+const Ks0108Char_t char_92={4, {0x00,0x06,0x18,0x60}}; // backslash
 
 // original was "93":[0,6,4,4,4,4,6,0,0,0,0,0,0,0,0,0
 const Ks0108Char_t char_93={3, {0x00,0x42,0x7e}}; // ]
@@ -615,23 +613,28 @@ const uint16_t charTable[] = {
         1096,1097,1098,1100,// ш, щ, ъ, ь,
         1101,1102,1103,1105,// э, ю, я, ё,
         8364};
+
+
+const uint16_t charTableSize = 185;
+
+
 const Ks0108Char_t* chars[] = {
-        &char_33, &char_34, &char_35, &char_36, &char_37, &char_38, &char_39, &char_40, &char_41, &char_42, &char_43, &char_44,
-        &char_45, &char_46, &char_47, &char_48, &char_49, &char_50, &char_51, &char_52, &char_53, &char_54, &char_55, &char_56,
-        &char_57, &char_58, &char_59, &char_60, &char_61, &char_62, &char_63, &char_64, &char_65, &char_66, &char_67, &char_68,
-        &char_69, &char_70, &char_71, &char_72, &char_73, &char_74, &char_75, &char_76, &char_77, &char_78, &char_79, &char_80,
-        &char_81, &char_82, &char_83, &char_84, &char_85, &char_86, &char_87, &char_88, &char_89, &char_90, &char_91, &char_92,
-        &char_93, &char_94, &char_95, &char_96, &char_97, &char_98, &char_99, &char_100, &char_101, &char_102, &char_103, &char_104,
-        &char_105, &char_106, &char_107, &char_108, &char_109, &char_110, &char_111, &char_112, &char_113, &char_114, &char_115, &char_116,
-        &char_117, &char_118, &char_119, &char_120, &char_121, &char_122, &char_123, &char_124, &char_125, &char_126, &char_161, &char_162,
-        &char_163, &char_164, &char_165, &char_166, &char_167, &char_168, &char_169, &char_171, &char_172, &char_174, &char_175, &char_176,
-        &char_177, &char_178, &char_179, &char_180, &char_181, &char_182, &char_183, &char_185, &char_186, &char_187, &char_188, &char_189,
-        &char_190, &char_191, &char_1025, &char_1040, &char_1041, &char_1042, &char_1043, &char_1044, &char_1045, &char_1046, &char_1047, &char_1048,
-        &char_1049, &char_1050, &char_1051, &char_1052, &char_1053, &char_1054, &char_1055, &char_1056, &char_1057, &char_1058, &char_1060, &char_1061,
-        &char_1062, &char_1063, &char_1064, &char_1065, &char_1066, &char_1068, &char_1069, &char_1070, &char_1071, &char_1072, &char_1073, &char_1074,
-        &char_1075, &char_1076, &char_1077, &char_1078, &char_1079, &char_1080, &char_1081, &char_1082, &char_1083, &char_1084, &char_1085, &char_1086,
-        &char_1087, &char_1088, &char_1089, &char_1090, &char_1092, &char_1093, &char_1094, &char_1095, &char_1096, &char_1097, &char_1098, &char_1100,
-        &char_1101, &char_1102, &char_1103, &char_1105, &char_8364};
+&char_33, &char_34, &char_35, &char_36, &char_37, &char_38, &char_39, &char_40, &char_41, &char_42, &char_43, &char_44,
+&char_45, &char_46, &char_47, &char_48, &char_49, &char_50, &char_51, &char_52, &char_53, &char_54, &char_55, &char_56,
+&char_57, &char_58, &char_59, &char_60, &char_61, &char_62, &char_63, &char_64, &char_65, &char_66, &char_67, &char_68,
+&char_69, &char_70, &char_71, &char_72, &char_73, &char_74, &char_75, &char_76, &char_77, &char_78, &char_79, &char_80,
+&char_81, &char_82, &char_83, &char_84, &char_85, &char_86, &char_87, &char_88, &char_89, &char_90, &char_91, &char_92,
+&char_93, &char_94, &char_95, &char_96, &char_97, &char_98, &char_99, &char_100, &char_101, &char_102, &char_103, &char_104,
+&char_105, &char_106, &char_107, &char_108, &char_109, &char_110, &char_111, &char_112, &char_113, &char_114, &char_115, &char_116,
+&char_117, &char_118, &char_119, &char_120, &char_121, &char_122, &char_123, &char_124, &char_125, &char_126, &char_161, &char_162,
+&char_163, &char_164, &char_165, &char_166, &char_167, &char_168, &char_169, &char_171, &char_172, &char_174, &char_175, &char_176,
+&char_177, &char_178, &char_179, &char_180, &char_181, &char_182, &char_183, &char_185, &char_186, &char_187, &char_188, &char_189,
+&char_190, &char_191, &char_1025, &char_1040, &char_1041, &char_1042, &char_1043, &char_1044, &char_1045, &char_1046, &char_1047, &char_1048,
+&char_1049, &char_1050, &char_1051, &char_1052, &char_1053, &char_1054, &char_1055, &char_1056, &char_1057, &char_1058, &char_1060, &char_1061,
+&char_1062, &char_1063, &char_1064, &char_1065, &char_1066, &char_1068, &char_1069, &char_1070, &char_1071, &char_1072, &char_1073, &char_1074,
+&char_1075, &char_1076, &char_1077, &char_1078, &char_1079, &char_1080, &char_1081, &char_1082, &char_1083, &char_1084, &char_1085, &char_1086,
+&char_1087, &char_1088, &char_1089, &char_1090, &char_1092, &char_1093, &char_1094, &char_1095, &char_1096, &char_1097, &char_1098, &char_1100,
+&char_1101, &char_1102, &char_1103, &char_1105, &char_8364};
 
 #endif //TMONITOR_KS0108_FONT
 // это окончание автоматически сгенерированного файла шрифта для библиотеки ks0108

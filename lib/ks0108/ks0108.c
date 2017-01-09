@@ -4,22 +4,22 @@
 #include "ks0108.h"
 #include "ks0108_font.h"
 
+const Ks0108Char_t spaceChar = {2, {0x00, 0x00}};
+
 void ks0108_strob();
 
 void ks0108_init() {
     gpio_clear(GPIOA, GPIO_ALL);
     gpio_clear(GPIOB, GPIO0); // RES = 0
-    uint8_t delay = 100;
+    uint16_t delay = 20;
     while (delay--)
             __asm__("nop");
-    gpio_set(GPIOB, GPIO0); // RES = 1
-    ks0108_waitReady(1);
-    ks0108_waitReady(2);
+    gpio_set(GPIOB, GPIO0); // RES = 1;
     uint16_t cs;
-    for (cs = 1; cs < 3; cs++) {
-        gpio_clear(GPIOA, GPIO_ALL);
-        ks0108_sendCmdOrData(cs, 0, 0, 0x3f);
+    for (cs = 2; cs > 0; cs--) {
+        ks0108_waitReady(cs, WAITRESETPIN);
         ks0108_sendCmdOrData(cs, 0, 0, 0xc0);
+        ks0108_sendCmdOrData(cs, 0, 0, 0x3f);
     }
 }
 
@@ -66,33 +66,27 @@ uint8_t ks0108_receiveData(uint8_t chip) {
     return data;
 }
 
-void ks0108_waitReady(uint8_t chip) {
+void ks0108_waitReady(uint8_t chip, uint16_t waitLines) { //WAITRESETPIN | WAITONOFFPIN | WAITBUSYPIN
     gpio_clear(GPIOA, GPIO_ALL);
     //перевести пины (4,5,7) в состояние входов
     gpio_set_mode(GPIOA, GPIO_MODE_INPUT,
-                  GPIO_CNF_INPUT_PULL_UPDOWN, WAITRESETPIN | WAITONOFFPIN | WAITBUSYPIN);
-    GPIO_ODR(GPIOA) = !(WAITRESETPIN | WAITONOFFPIN | WAITBUSYPIN);
-    switch (chip) {
-        case 1:
-            gpio_set(GPIOA, CHIP1_PIN);
-            break;
-        case 2:
-            gpio_set(GPIOA, CHIP2_PIN);
-            break;
-    }
+                  GPIO_CNF_INPUT_PULL_UPDOWN, waitLines);
+    //GPIO_ODR(GPIOA) = !(waitLines);
+    ks0108_CS(chip);
     gpio_set(GPIOA, RWPIN);
     gpio_set(GPIOA, EPIN);
     __asm__("nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;");
-    while (gpio_port_read(GPIOA) & 0x0090) {
-        uint16_t flags = (uint16_t) (gpio_port_read(GPIOA) & 0x00ff);
-        if (flags)
-            gpio_set(GPIOC, GPIO13); //blink led
+    while ((gpio_port_read(GPIOA) & waitLines)) {
+        //uint16_t flags = gpio_port_read(GPIOA);
+        uint16_t delay = 20;
+        while (delay--)
+                __asm__("nop");
     }
     gpio_clear(GPIOA, EPIN);
     __asm__("nop;nop;nop;nop;nop");
     gpio_clear(GPIOA, GPIO_ALL);
     gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_2_MHZ,
-                  GPIO_CNF_OUTPUT_PUSHPULL, WAITRESETPIN | WAITONOFFPIN | WAITBUSYPIN);
+                  GPIO_CNF_OUTPUT_PUSHPULL, waitLines);
 }
 
 void ks0108_repaint(uint8_t mode) {
@@ -124,7 +118,7 @@ void ks0108_paint(uint8_t pattern) {
 }
 
 void ks0108_sendCmdOrData(uint8_t cs, uint8_t rs, uint8_t rw, uint8_t data) {
-    ks0108_waitReady(cs);
+    ks0108_waitReady(cs, WAITBUSYPIN);
     if (cs == 0) {
         //SEND TO BOTH
         gpio_set(GPIOA, CHIP1_PIN);
@@ -159,21 +153,87 @@ void ks0108_setAddress(uint8_t chip, uint8_t address) {
     ks0108_sendCmdOrData(chip, 0, 0, data);
 }
 
-void ks0108_drawPixel(uint8_t x, uint8_t y, uint8_t color) {
-    if ((x > 127) || (y > 63)) return;
+const Ks0108Char_t *getCharacter(uint16_t s) {
+    int i = 0;
+    for (; i < charTableSize; ++i) {
+        if (charTable[i] == s)
+            return chars[i];
+    }
+    return &spaceChar;
+}
 
-    uint8_t chip;
-    if (x < 64) {
-        chip = 1;
-    } else {
-        chip = 2;
+uint8_t ks0108_chipByAddress(uint8_t x) { //выбрать номер чипа по адресу
+    return (uint8_t) ((x < 64) ? 1 : 2);
+}
+
+void ks0108_GoTo(uint8_t x, uint8_t y) {//послать команду на позиционирование по адресу
+    uint8_t chip = ks0108_chipByAddress(x);
+
+    if (chip == 2) {
         x = x - 64;
     }
     uint8_t p = y >> 3;
     ks0108_setPage(chip, p);
     ks0108_setAddress(chip, x);
+}
+
+uint8_t ks0108_readMemoryAt(uint8_t x, uint8_t y) {//прочитать данные по адресу
+    uint8_t chip = ks0108_chipByAddress(x);
+    ks0108_GoTo(x, y);
     ks0108_receiveData(chip);
-    uint8_t current = ks0108_receiveData(chip);
+    return ks0108_receiveData(chip);
+}
+
+void
+ks0108_drawText(uint8_t x, uint8_t y, uint8_t color, wchar_t *text) { //x и y -- верхний правый угол выводимого текста
+    gpio_clear(GPIOA, GPIO_ALL);
+    //использовать x и y для настройки на чип, страницу и адрес
+    int charPos = 0;
+    uint16_t symbol = 0x00;
+    do {
+        symbol = text[charPos];
+        uint8_t curCS = ks0108_chipByAddress(x);
+        Ks0108Char_t *charCur = getCharacter(symbol);
+        uint8_t cBites = y % 8;
+
+        int i = 0;
+        for (; i < charCur->size; i++) {
+            if (x>127)
+                break;
+            if (cBites == 0) {
+                ks0108_GoTo(x, y);
+                //вывод выровнен по границе страницы и вспомогательные чтения делать НЕ НАДО
+                ks0108_sendCmdOrData(curCS, 1, 0, charCur->l[i]);
+            } else {
+                uint8_t pre = ks0108_readMemoryAt(x,y);
+                ks0108_GoTo(x, y);
+                pre |=charCur->l[i]<<(8-cBites);
+                ks0108_sendCmdOrData(curCS, 1, 0, pre);
+                if (y<55) {
+                    uint8_t pre = ks0108_readMemoryAt(x,y+8);
+                    ks0108_GoTo(x, y+8);
+                    pre |=charCur->l[i]>>cBites;
+                    ks0108_sendCmdOrData(curCS, 1, 0, pre);
+                }
+            }
+            x += 1;
+            uint8_t tmpCS = ks0108_chipByAddress(x);
+            if (tmpCS != curCS) {
+                curCS = tmpCS;
+
+            }
+        }
+
+        charPos += 1;
+    } while (symbol != 0x00);
+}
+
+void ks0108_drawPixel(uint8_t x, uint8_t y, uint8_t color) {
+    if ((x > 127) || (y > 63)) return;
+
+    uint8_t chip = ks0108_chipByAddress(x);
+
+    uint8_t current = ks0108_readMemoryAt(x, y);
     uint8_t mask = 1 << (y & 0x07);
     if (color) {
         current |= mask;
@@ -186,13 +246,13 @@ void ks0108_drawPixel(uint8_t x, uint8_t y, uint8_t color) {
 
 void ks0108_drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t color) {
 
-    uint8_t xMin = x0 < x1 ? x0 : x1;
-    uint8_t xMax = x0 == xMin ? x1 : x0;
+    int16_t xMin = x0 < x1 ? x0 : x1;
+    int16_t xMax = x0 == xMin ? x1 : x0;
 
-    uint8_t yMin = y0 < y1 ? y0 : y1;
-    uint8_t yMax = y0 == yMin ? y1 : y0;
+    int16_t yMin = y0 < y1 ? y0 : y1;
+    int16_t yMax = y0 == yMin ? y1 : y0;
 
-    uint8_t steep = (yMax - yMin) > (xMax - xMin);
+    int16_t steep = (yMax - yMin) > (xMax - xMin);
     if (steep) {
         _swap_uint16_t(x0, y0);
         _swap_uint16_t(x1, y1);
@@ -216,7 +276,7 @@ void ks0108_drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t col
         ystep = -1;
     }
 
-    for (; x0<=x1; x0++) {
+    for (; x0 <= x1; x0++) {
         if (steep) {
             ks0108_drawPixel(y0, x0, color);
         } else {

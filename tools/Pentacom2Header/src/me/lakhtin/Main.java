@@ -121,7 +121,9 @@ public class Main {
                         charSet.add(id);
 
                     });
-            System.out.println("const uint16_t charTable[] = {");
+
+            System.out.println("\n\r\n\rconst uint16_t charTableSize = "+charSet.size()+";");
+            System.out.println("\n\r\n\rconst uint16_t charTable[] = {");
             int i = 0;
             String chs = "";
             int divider = 4;
@@ -144,7 +146,8 @@ public class Main {
 
             divider = 12;
             i = 0;
-            System.out.println("const Ks0108Char_t* chars[] = {");
+
+            System.out.println("\n\r\n\rconst Ks0108Char_t* chars[] = {");
             for (Object val : charSet) {
                 if (i % divider == 0) {
                     System.out.print("\t\t");

@@ -5,6 +5,8 @@
 #define TMONITOR_KS0108
 
 #include <libopencm3/stm32/gpio.h>
+#include <stddef.h>
+
 
 // uint32_t v=0xdeadc0de;
 // printf("g1 %x\n",get_bits(&v,8,10));
@@ -86,12 +88,14 @@ void ks0108_init();
 void ks0108_CS(uint8_t);
 void ks0108_sendCmdOrData(uint8_t cs, uint8_t rs, uint8_t rw, uint8_t data);
 void delayMs(uint32_t mks);
-void ks0108_waitReady(uint8_t);
+void ks0108_waitReady(uint8_t chip, uint16_t waitLines);
 void ks0108_setPage(uint8_t, uint8_t);
 void ks0108_setAddress(uint8_t, uint8_t);
+uint8_t ks0108_readMemoryAt(uint8_t x, uint8_t y);
 uint8_t ks0108_receiveData(uint8_t);
 void ks0108_drawPixel(uint8_t x, uint8_t y, uint8_t color);
 void ks0108_drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,  uint8_t color);
+void ks0108_drawText(uint8_t x, uint8_t y, uint8_t color, wchar_t * text);
 
 void ks0108_repaint(uint8_t mode);
 void ks0108_paint(uint8_t pattern);
