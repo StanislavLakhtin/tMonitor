@@ -25,14 +25,10 @@ int main(void) {
 
     while (1) {
 
-
-        ks0108_repaint(0);  //проверяем простую запись
-        shortDelay(8000000);
-
-        exp01(); //проверяем чтение и перезапись прочитанного запись
-        shortDelay(8000000);
-        ks0108_paint(0);  //пишем простое число, например, 0 для стирания всего на экране
-        shortDelay(8000000);
+        //exp01(); //проверяем чтение и перезапись прочитанного запись
+        //shortDelay(8000000);
+        //ks0108_paint(0);  //пишем простое число, например, 0 для стирания всего на экране
+        //shortDelay(8000000);
 
         exp02(); // спираль из точек
         shortDelay(8000000);
@@ -43,29 +39,6 @@ int main(void) {
     }
     /* В любых нормальных обстоятельствах мы никогда не попадём сюда */
     return 0;
-}
-
-void exp01() {
-    uint8_t chip, page, address;
-    //set cs
-    for (chip = 1; chip < 3; chip++) {
-        for (page = 0; page < 8; page++) {
-            ks0108_setPage(chip, page);
-            ks0108_setAddress(chip, 0);
-            uint8_t buffer[64];
-            ks0108_receiveData(chip); // ОБЯЗАТЕЛЬНОЕ ФИКТИВНОЕ ЧТЕНИЕ!
-            for (address = 0; address < 64; address++) {
-                buffer[address] = ks0108_receiveData(chip);
-            }
-            ks0108_setPage(chip, page);
-            ks0108_setAddress(chip, 0);
-            for (address = 0; address < 64; address++) {
-                uint8_t p = buffer[address];
-                p = (p == 0x55) ? 0xaa : 0x55;
-                ks0108_sendCmdOrData(chip, 1, 0,  p);
-            }
-        }
-    }
 }
 
 void exp02() {
@@ -97,11 +70,12 @@ void exp03() {
     ks0108_paint(0);
     ks0108_sendCmdOrData(1,0,0, 0xc0);
     ks0108_sendCmdOrData(2,0,0, 0xc0);
-    ks0108_drawText(0, 0, BLACK, L"Привет, мир!");
-    ks0108_drawText(0, 8, BLACK, L"Это очень длинная строка.");
-    ks0108_drawText(0, 16, BLACK, L"Это строка, выходящая за экран");
-    ks0108_drawText(0, 27, BLACK, L"Усложним. Строка НЕ попадает в страницу.");
-    ks0108_drawText(0, 57, BLACK, L"самая верхушка букв");
+    ks0108_drawText(0, 0, BLACK, L"АБВГДЕЁЖЗИКЛМНОПРСТУФХЦЧШЩЫЬЪЭЮЯ");
+    ks0108_drawText(0, 8, BLACK, L"ФХЦЧШЩЫЬЪЭЮЯ");
+    ks0108_drawText(0, 16, BLACK, L"абвгдеёжзиклмнопрстуфхцчшщыьъэюя");
+    ks0108_drawText(0, 24, BLACK, L"чшщыьъэюя-0123456789");
+    ks0108_drawText(0, 32, BLACK, L"ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    ks0108_drawText(0, 40, BLACK, L"WXYZabcdefjhijklmnopqrstuvwxyz");
 }
 
 void exp04() {

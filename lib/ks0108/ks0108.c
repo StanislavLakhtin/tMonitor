@@ -61,7 +61,7 @@ uint8_t ks0108_receiveData(uint8_t chip) {
     uint8_t data = (uint8_t) gpio_port_read(GPIOA);
     gpio_clear(GPIOA, EPIN);
     gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_2_MHZ,
-                  GPIO_CNF_OUTPUT_PUSHPULL, 0xff);
+                  GPIO_CNF_OUTPUT_PUSHPULL, GPIO_ALL);
     gpio_clear(GPIOA, GPIO_ALL);
     return data;
 }
@@ -209,7 +209,7 @@ ks0108_drawText(uint8_t x, uint8_t y, uint8_t color, wchar_t *text) { //x и y -
                 ks0108_GoTo(x, y);
                 pre |=charCur->l[i]<<(8-cBites);
                 ks0108_sendCmdOrData(curCS, 1, 0, pre);
-                if (y<55) {
+                if (y<56) {
                     uint8_t pre = ks0108_readMemoryAt(x,y+8);
                     ks0108_GoTo(x, y+8);
                     pre |=charCur->l[i]>>cBites;
