@@ -103,7 +103,11 @@ uint8_t ks0108_receiveData(uint8_t);
 
 void ks0108_drawPixel(uint8_t x, uint8_t y, uint8_t color);
 
-void ks0108_drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t color);
+uint8_t ks0108_GoTo(uint8_t x, uint8_t y);
+
+void ks0108_drawLine(int x0, int y0, int x1, int y1, uint8_t color);
+
+void ks0108_drawCircle(int x, int y, int radius, uint8_t color);
 
 void ks0108_drawText(uint8_t x, uint8_t y, uint8_t color, wchar_t *text);
 

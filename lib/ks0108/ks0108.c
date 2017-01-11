@@ -1,10 +1,11 @@
 //
 // Created by sl on 09.11.16.
 //
+#include <stdlib.h>
 #include "ks0108.h"
 #include "ks0108_font.h"
 
-const Ks0108Char_t spaceChar = {2, {0x00, 0x00}};
+Ks0108Char_t spaceChar = {2, {0x00, 0x00}};
 
 void ks0108_strob();
 
@@ -55,11 +56,15 @@ uint8_t ks0108_receiveData(uint8_t chip) {
                 GPIO_CNF_INPUT_PULL_UPDOWN, 0xff);
   gpio_set(GPIOA, RWPIN | RSPIN);
   ks0108_CS(chip);
-  __asm__("nop;nop;nop;");
+  gpio_set(GPIOA, EPIN);
+  __asm__("nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;");
+  gpio_clear(GPIOA, EPIN);
+  shortDelay(40);
   gpio_set(GPIOA, EPIN);
   __asm__("nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;");
   uint8_t data = (uint8_t) gpio_port_read(GPIOA);
   gpio_clear(GPIOA, EPIN);
+  __asm__("nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;nop;");
   gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_2_MHZ,
                 GPIO_CNF_OUTPUT_PUSHPULL, GPIO_ALL);
   gpio_clear(GPIOA, GPIO_ALL);
@@ -105,15 +110,44 @@ void ks0108_repaint(uint8_t mode) {
 }
 
 void ks0108_paint(uint8_t pattern) {
-  uint8_t chip, page, address;
-  for (chip = 1; chip < 3; chip++) {
-    for (page = 0; page < 8; page++) {
-      ks0108_setPage(chip, page);
-      ks0108_setAddress(chip, address);
-      for (address = 0; address < 64; address++) {
-        ks0108_sendCmdOrData(chip, 1, 0, pattern);
-      }
+  uint8_t x, y;
+  for (x = 0; x < 128; x += 64)
+    for (y = 0; y < 64; y += 8) {
+      uint8_t cs = ks0108_GoTo(x, y);
+      uint8_t addresses = 64;
+      while (addresses--)
+        ks0108_sendCmdOrData(cs, 1, 0, pattern);
     }
+}
+
+void ks0108_drawCircle(int x, int y, int radius, uint8_t color) {
+  if (x < 0 || x > 127 || y < 0 || y > 63)
+    return;
+
+  int xx = 0;
+  int yy = radius;
+  int delta = 1 - 2 * radius;
+  int r = 0;
+  while (yy >= 0) {
+    ks0108_drawPixel(x + xx, y + yy, color);
+    ks0108_drawPixel(x + xx, y - yy, color);
+    ks0108_drawPixel(x - xx, y + yy, color);
+    ks0108_drawPixel(x - xx, y - yy, color);
+    r = 2 * (delta + yy) - 1;
+    if (delta < 0 && r <= 0) {
+      ++xx;
+      delta += 2 * xx + 1;
+      continue;
+    }
+    r = 2 * (delta - xx) - 1;
+    if (delta > 0 && r > 0) {
+      --yy;
+      delta += 1 - 2 * yy;
+      continue;
+    }
+    ++xx;
+    delta += 2 * (xx - yy);
+    --yy;
   }
 }
 
@@ -153,7 +187,7 @@ void ks0108_setAddress(uint8_t chip, uint8_t address) {
   ks0108_sendCmdOrData(chip, 0, 0, data);
 }
 
-const Ks0108Char_t *getCharacter(uint16_t s) {
+Ks0108Char_t *getCharacter(uint16_t s) {
   int i = 0;
   for (; i < charTableSize; ++i) {
     if (charTable[i] == s)
@@ -166,21 +200,22 @@ uint8_t ks0108_chipByAddress(uint8_t x) { //выбрать номер чипа �
   return (uint8_t) ((x < 64) ? 1 : 2);
 }
 
-void ks0108_GoTo(uint8_t x, uint8_t y) {//послать команду на позиционирование по адресу
-  uint8_t chip = ks0108_chipByAddress(x);
+uint8_t
+ks0108_GoTo(uint8_t x, uint8_t y) {//послать команду на позиционирование по адресу, возвращается номер чипа(1 или 2)
+  uint8_t cs = ks0108_chipByAddress(x);
 
-  if (chip == 2) {
+  if (cs == 2) {
     x = x - 64;
   }
   uint8_t p = y >> 3;
-  ks0108_setPage(chip, p);
-  ks0108_setAddress(chip, x);
+  ks0108_setPage(cs, p);
+  ks0108_setAddress(cs, x);
+  return cs;
 }
 
 uint8_t ks0108_readMemoryAt(uint8_t x, uint8_t y) {//прочитать данные по адресу
   uint8_t chip = ks0108_chipByAddress(x);
   ks0108_GoTo(x, y);
-  ks0108_receiveData(chip);
   return ks0108_receiveData(chip);
 }
 
@@ -194,33 +229,32 @@ ks0108_drawText(uint8_t x, uint8_t y, uint8_t color, wchar_t *text) { //x и y -
     symbol = text[charPos];
     uint8_t curCS = ks0108_chipByAddress(x);
     Ks0108Char_t *charCur = getCharacter(symbol);
-    uint8_t cBites = y % 8;
+    uint8_t cBites = (uint8_t) (y % 8);
 
     int i = 0;
     for (; i < charCur->size; i++) {
       if (x > 127)
         break;
-      if (cBites == 0) {
-        ks0108_GoTo(x, y);
-        //вывод выровнен по границе страницы и вспомогательные чтения делать НЕ НАДО
-        ks0108_sendCmdOrData(curCS, 1, 0, charCur->l[i]);
-      } else {
-        uint8_t pre = ks0108_readMemoryAt(x, y);
-        ks0108_GoTo(x, y);
-        pre |= charCur->l[i] << (8 - cBites);
-        ks0108_sendCmdOrData(curCS, 1, 0, pre);
-        if (y < 56) {
-          uint8_t pre = ks0108_readMemoryAt(x, y + 8);
-          ks0108_GoTo(x, y + 8);
-          pre |= charCur->l[i] >> cBites;
-          ks0108_sendCmdOrData(curCS, 1, 0, pre);
-        }
+      uint8_t calcSymLine = ks0108_readMemoryAt(x, y);
+      ks0108_GoTo(x, y);
+      if (color)
+        calcSymLine |= charCur->l[i] << cBites;
+      else
+        calcSymLine &= ~(charCur->l[i] << cBites);
+      ks0108_sendCmdOrData(curCS, 1, 0, calcSymLine);
+      if (y < 57 && cBites>0) {
+        calcSymLine = ks0108_readMemoryAt(x, y + 8);
+        ks0108_GoTo(x, y + 8);
+        if (color)
+          calcSymLine |= charCur->l[i] >> (8 - cBites);
+        else
+          calcSymLine &= ~(charCur->l[i] >> (8 - cBites));
+        ks0108_sendCmdOrData(curCS, 1, 0, calcSymLine);
       }
       x += 1;
       uint8_t tmpCS = ks0108_chipByAddress(x);
       if (tmpCS != curCS) {
         curCS = tmpCS;
-
       }
     }
 
@@ -244,7 +278,7 @@ void ks0108_drawPixel(uint8_t x, uint8_t y, uint8_t color) {
   ks0108_sendCmdOrData(chip, 1, 0, current);
 }
 
-void ks0108_drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t color) {
+/*void ks0108_drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t color) {
 
   int16_t xMin = x0 < x1 ? x0 : x1;
   int16_t xMax = x0 == xMin ? x1 : x0;
@@ -288,4 +322,29 @@ void ks0108_drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t col
       err += dx;
     }
   }
+}*/
+
+void ks0108_drawLine(int x1, int y1, int x2, int y2, uint8_t color) {
+  const int deltaX = abs(x2 - x1);
+  const int deltaY = abs(y2 - y1);
+  const int signX = x1 < x2 ? 1 : -1;
+  const int signY = y1 < y2 ? 1 : -1;
+  //
+  int error = deltaX - deltaY;
+  //
+  ks0108_drawPixel(x2, y2, color);
+  while (x1 != x2 || y1 != y2) {
+    ks0108_drawPixel(x1, y1, color);
+    const int error2 = error * 2;
+    //
+    if (error2 > -deltaY) {
+      error -= deltaY;
+      x1 += signX;
+    }
+    if (error2 < deltaX) {
+      error += deltaX;
+      y1 += signY;
+    }
+  }
+
 }
