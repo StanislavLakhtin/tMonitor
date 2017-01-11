@@ -8,650 +8,665 @@
 
 
 typedef struct {
-    uint8_t size;
-    uint8_t l[];
+  uint8_t size;
+  uint8_t l[];
 } Ks0108Char_t;
 
 
 // original was {"33":[0,2,2,2,2,2,0,2,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_33={2, {0x00,0xbe}}; // !
+const Ks0108Char_t char_33 = {2, {0x00, 0xbe}}; // !
 
 // original was "34":[0,10,10,0,0,0,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_34={4, {0x00,0x06,0x00,0x06}}; // "
+const Ks0108Char_t char_34 = {4, {0x00, 0x06, 0x00, 0x06}}; // "
 
 // original was "35":[0,20,20,62,20,62,20,20,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_35={6, {0x00,0x28,0xfe,0x28,0xfe,0x28}}; // #
+const Ks0108Char_t char_35 = {6, {0x00, 0x28, 0xfe, 0x28, 0xfe, 0x28}}; // #
 
 // original was "36":[0,8,60,10,30,40,40,30,8,0,0,0,0,0,0,0
-const Ks0108Char_t char_36={6, {0x00,0x98,0x94,0xfe,0x94,0x64}}; // $
+const Ks0108Char_t char_36 = {6, {0x00, 0x98, 0x94, 0xfe, 0x94, 0x64}}; // $
 
 // original was "37":[0,10,8,4,4,2,10,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_37={4, {0x00,0x62,0x18,0x46}}; // %
+const Ks0108Char_t char_37 = {4, {0x00, 0x62, 0x18, 0x46}}; // %
 
 // original was "38":[0,12,18,12,82,34,92,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_38={7, {0x00,0x34,0x4a,0x4a,0x54,0x20,0x50}}; // &
+const Ks0108Char_t char_38 = {7, {0x00, 0x34, 0x4a, 0x4a, 0x54, 0x20, 0x50}}; // &
 
 // original was "39":[0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_39={2, {0x00,0x06}}; // '
+const Ks0108Char_t char_39 = {2, {0x00, 0x06}}; // '
 
 // original was "40":[0,4,2,2,2,2,4,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_40={3, {0x00,0x3c,0x42}}; // (
+const Ks0108Char_t char_40 = {3, {0x00, 0x3c, 0x42}}; // (
 
 // original was "41":[0,2,4,4,4,4,2,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_41={3, {0x00,0x42,0x3c}}; // )
+const Ks0108Char_t char_41 = {3, {0x00, 0x42, 0x3c}}; // )
 
 // original was "42":[0,0,4,14,4,10,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_42={4, {0x00,0x28,0x1c,0x28}}; // *
+const Ks0108Char_t char_42 = {4, {0x00, 0x28, 0x1c, 0x28}}; // *
 
 // original was "43":[0,8,8,62,8,8,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_43={6, {0x00,0x08,0x08,0x3e,0x08,0x08}}; // +
+const Ks0108Char_t char_43 = {6, {0x00, 0x08, 0x08, 0x3e, 0x08, 0x08}}; // +
 
 // original was "44":[0,0,0,0,0,0,4,2,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_44={3, {0x00,0x80,0x40}}; // ,
+const Ks0108Char_t char_44 = {3, {0x00, 0x80, 0x40}}; // ,
 
 // original was "45":[0,0,0,62,0,0,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_45={6, {0x00,0x08,0x08,0x08,0x08,0x08}}; // -
+const Ks0108Char_t char_45 = {6, {0x00, 0x08, 0x08, 0x08, 0x08, 0x08}}; // -
 
 // original was "46":[0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_46={2, {0x00,0x80}}; // .
+const Ks0108Char_t char_46 = {2, {0x00, 0x80}}; // .
 
 // original was "47":[0,8,8,4,4,2,2,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_47={4, {0x00,0x60,0x18,0x06}}; // /
+const Ks0108Char_t char_47 = {4, {0x00, 0x60, 0x18, 0x06}}; // /
 
 // original was "48":[0,28,34,34,42,34,34,28,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_48={6, {0x00,0x7c,0x82,0x92,0x82,0x7c}}; // 0
+const Ks0108Char_t char_48 = {6, {0x00, 0x7c, 0x82, 0x92, 0x82, 0x7c}}; // 0
 
 // original was "49":[0,6,4,4,4,4,4,14,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_49={4, {0x00,0x82,0xfe,0x80}}; // 1
+const Ks0108Char_t char_49 = {4, {0x00, 0x82, 0xfe, 0x80}}; // 1
 
 // original was "50":[0,28,34,32,32,28,2,62,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_50={6, {0x00,0xc4,0xa2,0xa2,0xa2,0x9c}}; // 2
+const Ks0108Char_t char_50 = {6, {0x00, 0xc4, 0xa2, 0xa2, 0xa2, 0x9c}}; // 2
 
 // original was "51":[0,28,34,24,32,32,34,28,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_51={6, {0x00,0x44,0x82,0x8a,0x8a,0x74}}; // 3
+const Ks0108Char_t char_51 = {6, {0x00, 0x44, 0x82, 0x8a, 0x8a, 0x74}}; // 3
 
 // original was "52":[0,16,24,20,18,18,62,16,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_52={6, {0x00,0x70,0x48,0x44,0xfe,0x40}}; // 4
+const Ks0108Char_t char_52 = {6, {0x00, 0x70, 0x48, 0x44, 0xfe, 0x40}}; // 4
 
 // original was "53":[0,30,2,30,32,32,34,28,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_53={6, {0x00,0x4e,0x8a,0x8a,0x8a,0x70}}; // 5
+const Ks0108Char_t char_53 = {6, {0x00, 0x4e, 0x8a, 0x8a, 0x8a, 0x70}}; // 5
 
 // original was "54":[0,28,2,30,34,34,34,28,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_54={6, {0x00,0x7c,0x8a,0x8a,0x8a,0x70}}; // 6
+const Ks0108Char_t char_54 = {6, {0x00, 0x7c, 0x8a, 0x8a, 0x8a, 0x70}}; // 6
 
 // original was "55":[0,62,34,32,16,8,4,4,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_55={6, {0x00,0x06,0xc2,0x22,0x12,0x0e}}; // 7
+const Ks0108Char_t char_55 = {6, {0x00, 0x06, 0xc2, 0x22, 0x12, 0x0e}}; // 7
 
 // original was "56":[0,28,34,28,34,34,34,28,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_56={6, {0x00,0x74,0x8a,0x8a,0x8a,0x74}}; // 8
+const Ks0108Char_t char_56 = {6, {0x00, 0x74, 0x8a, 0x8a, 0x8a, 0x74}}; // 8
 
 // original was "57":[0,28,34,34,34,60,32,28,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_57={6, {0x00,0x1c,0xa2,0xa2,0xa2,0x7c}}; // 9
+const Ks0108Char_t char_57 = {6, {0x00, 0x1c, 0xa2, 0xa2, 0xa2, 0x7c}}; // 9
 
 // original was "58":[0,6,6,0,0,6,6,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_58={3, {0x00,0x66,0x66}}; // :
+const Ks0108Char_t char_58 = {3, {0x00, 0x66, 0x66}}; // :
 
 // original was "59":[0,0,6,0,0,0,4,2,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_59={3, {0x00,0x84,0x44}}; // ;
+const Ks0108Char_t char_59 = {3, {0x00, 0x84, 0x44}}; // ;
 
 // original was "60":[0,0,8,4,2,4,8,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_60={4, {0x00,0x10,0x28,0x44}}; // <
+const Ks0108Char_t char_60 = {4, {0x00, 0x10, 0x28, 0x44}}; // <
 
 // original was "61":[0,0,62,0,62,0,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_61={6, {0x00,0x14,0x14,0x14,0x14,0x14}}; // =
+const Ks0108Char_t char_61 = {6, {0x00, 0x14, 0x14, 0x14, 0x14, 0x14}}; // =
 
 // original was "62":[0,2,4,8,4,2,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_62={4, {0x00,0x22,0x14,0x08}}; // >
+const Ks0108Char_t char_62 = {4, {0x00, 0x22, 0x14, 0x08}}; // >
 
 // original was "63":[0,28,34,32,16,8,0,8,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_63={6, {0x00,0x04,0x02,0xa2,0x12,0x0c}}; // ?
+const Ks0108Char_t char_63 = {6, {0x00, 0x04, 0x02, 0xa2, 0x12, 0x0c}}; // ?
 
 // original was "64":[120,132,178,170,186,194,28,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_64={8, {0x00,0x3c,0x42,0x59,0x55,0x1d,0x21,0x3e}}; // @
+const Ks0108Char_t char_64 = {8, {0x00, 0x3c, 0x42, 0x59, 0x55, 0x1d, 0x21, 0x3e}}; // @
 
 // original was "65":[0,24,20,18,18,30,18,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_65={5, {0x00,0x78,0x24,0x22,0x7e}}; // A
+const Ks0108Char_t char_65 = {5, {0x00, 0x78, 0x24, 0x22, 0x7e}}; // A
 
 // original was "66":[0,14,18,14,18,18,14,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_66={5, {0x00,0x7e,0x4a,0x4a,0x34}}; // B
+const Ks0108Char_t char_66 = {5, {0x00, 0x7e, 0x4a, 0x4a, 0x34}}; // B
 
 // original was "67":[0,28,2,2,2,2,28,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_67={5, {0x00,0x3c,0x42,0x42,0x42}}; // C
+const Ks0108Char_t char_67 = {5, {0x00, 0x3c, 0x42, 0x42, 0x42}}; // C
 
 // original was "68":[0,14,18,18,18,18,14,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_68={5, {0x00,0x7e,0x42,0x42,0x3c}}; // D
+const Ks0108Char_t char_68 = {5, {0x00, 0x7e, 0x42, 0x42, 0x3c}}; // D
 
 // original was "69":[0,14,2,2,14,2,30,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_69={5, {0x00,0x7e,0x52,0x52,0x40}}; // E
+const Ks0108Char_t char_69 = {5, {0x00, 0x7e, 0x52, 0x52, 0x40}}; // E
 
 // original was "70":[0,30,2,2,14,2,2,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_70={5, {0x00,0x7e,0x12,0x12,0x02}}; // F
+const Ks0108Char_t char_70 = {5, {0x00, 0x7e, 0x12, 0x12, 0x02}}; // F
 
 // original was "71":[0,28,2,2,26,18,28,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_71={5, {0x00,0x3c,0x42,0x52,0x72}}; // G
+const Ks0108Char_t char_71 = {5, {0x00, 0x3c, 0x42, 0x52, 0x72}}; // G
 
 // original was "72":[0,18,18,18,30,18,18,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_72={5, {0x00,0x7e,0x10,0x10,0x7e}}; // H
+const Ks0108Char_t char_72 = {5, {0x00, 0x7e, 0x10, 0x10, 0x7e}}; // H
 
 // original was "73":[0,14,4,4,4,4,14,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_73={4, {0x00,0x42,0x7e,0x42}}; // I
+const Ks0108Char_t char_73 = {4, {0x00, 0x42, 0x7e, 0x42}}; // I
 
 // original was "74":[0,14,8,8,8,8,6,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_74={4, {0x00,0x42,0x42,0x3e}}; // J
+const Ks0108Char_t char_74 = {4, {0x00, 0x42, 0x42, 0x3e}}; // J
 
 // original was "75":[0,18,10,6,10,18,18,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_75={5, {0x00,0x7e,0x08,0x14,0x62}}; // K
+const Ks0108Char_t char_75 = {5, {0x00, 0x7e, 0x08, 0x14, 0x62}}; // K
 
 // original was "76":[0,2,2,2,2,10,14,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_76={4, {0x00,0x7e,0x40,0x60}}; // L
+const Ks0108Char_t char_76 = {4, {0x00, 0x7e, 0x40, 0x60}}; // L
 
 // original was "77":[0,34,54,42,42,34,34,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_77={6, {0x00,0x7e,0x04,0x18,0x04,0x7e}}; // M
+const Ks0108Char_t char_77 = {6, {0x00, 0x7e, 0x04, 0x18, 0x04, 0x7e}}; // M
 
 // original was "78":[0,18,18,22,26,18,18,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_78={5, {0x00,0x7e,0x08,0x10,0x7e}}; // N
+const Ks0108Char_t char_78 = {5, {0x00, 0x7e, 0x08, 0x10, 0x7e}}; // N
 
 // original was "79":[0,12,18,18,18,18,12,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_79={5, {0x00,0x3c,0x42,0x42,0x3c}}; // O
+const Ks0108Char_t char_79 = {5, {0x00, 0x3c, 0x42, 0x42, 0x3c}}; // O
 
 // original was "80":[0,14,18,18,18,14,2,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_80={5, {0x00,0x7e,0x22,0x22,0x1c}}; // P
+const Ks0108Char_t char_80 = {5, {0x00, 0x7e, 0x22, 0x22, 0x1c}}; // P
 
 // original was "81":[0,12,18,18,18,26,28,32,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_81={6, {0x00,0x3c,0x42,0x62,0x7c,0x80}}; // Q
+const Ks0108Char_t char_81 = {6, {0x00, 0x3c, 0x42, 0x62, 0x7c, 0x80}}; // Q
 
 // original was "82":[0,14,18,18,18,14,18,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_82={5, {0x00,0x7e,0x22,0x22,0x5c}}; // R
+const Ks0108Char_t char_82 = {5, {0x00, 0x7e, 0x22, 0x22, 0x5c}}; // R
 
 // original was "83":[0,28,2,12,16,16,14,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_83={5, {0x00,0x44,0x4a,0x4a,0x32}}; // S
+const Ks0108Char_t char_83 = {5, {0x00, 0x44, 0x4a, 0x4a, 0x32}}; // S
 
 // original was "84":[0,14,4,4,4,4,4,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_84={4, {0x00,0x02,0x7e,0x02}}; // T
+const Ks0108Char_t char_84 = {4, {0x00, 0x02, 0x7e, 0x02}}; // T
 
 // original was "85":[0,18,18,18,18,18,12,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_85={5, {0x00,0x3e,0x40,0x40,0x3e}}; // U
+const Ks0108Char_t char_85 = {5, {0x00, 0x3e, 0x40, 0x40, 0x3e}}; // U
 
 // original was "86":[0,18,18,18,12,12,12,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_86={5, {0x00,0x0e,0x70,0x70,0x0e}}; // V
+const Ks0108Char_t char_86 = {5, {0x00, 0x0e, 0x70, 0x70, 0x0e}}; // V
 
 // original was "87":[0,42,42,42,42,20,20,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_87={6, {0x00,0x1e,0x60,0x1e,0x60,0x1e}}; // W
+const Ks0108Char_t char_87 = {6, {0x00, 0x1e, 0x60, 0x1e, 0x60, 0x1e}}; // W
 
 // original was "88":[0,18,18,12,12,18,18,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_88={5, {0x00,0x66,0x18,0x18,0x66}}; // X
+const Ks0108Char_t char_88 = {5, {0x00, 0x66, 0x18, 0x18, 0x66}}; // X
 
 // original was "89":[0,18,18,18,28,8,6,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_89={5, {0x00,0x4e,0x50,0x30,0x1e}}; // Y
+const Ks0108Char_t char_89 = {5, {0x00, 0x4e, 0x50, 0x30, 0x1e}}; // Y
 
 // original was "90":[0,30,16,8,4,2,30,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_90={5, {0x00,0x62,0x52,0x4a,0x46}}; // Z
+const Ks0108Char_t char_90 = {5, {0x00, 0x62, 0x52, 0x4a, 0x46}}; // Z
 
 // original was "91":[0,6,2,2,2,2,6,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_91={3, {0x00,0x7e,0x42}}; // [
+const Ks0108Char_t char_91 = {3, {0x00, 0x7e, 0x42}}; // [
 
 // original was "92":[0,2,2,4,4,8,8,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_92={4, {0x00,0x06,0x18,0x60}}; // \
+const Ks0108Char_t char_92 = {4, {0x00, 0x06, 0x18, 0x60}}; // \
 
 // original was "93":[0,6,4,4,4,4,6,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_93={3, {0x00,0x42,0x7e}}; // ]
+const Ks0108Char_t char_93 = {3, {0x00, 0x42, 0x7e}}; // ]
 
 // original was "94":[0,8,20,34,0,0,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_94={6, {0x00,0x08,0x04,0x02,0x04,0x08}}; // ^
+const Ks0108Char_t char_94 = {6, {0x00, 0x08, 0x04, 0x02, 0x04, 0x08}}; // ^
 
 // original was "95":[0,0,0,0,0,0,0,126,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_95={7, {0x00,0x80,0x80,0x80,0x80,0x80,0x80}}; // _
+const Ks0108Char_t char_95 = {7, {0x00, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80}}; // _
 
 // original was "96":[0,2,4,0,0,0,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_96={3, {0x00,0x02,0x04}}; // `
+const Ks0108Char_t char_96 = {3, {0x00, 0x02, 0x04}}; // `
 
 // original was "97":[0,0,0,12,10,10,20,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_97={5, {0x00,0x30,0x48,0x38,0x40}}; // a
+const Ks0108Char_t char_97 = {5, {0x00, 0x30, 0x48, 0x38, 0x40}}; // a
 
 // original was "98":[0,2,2,6,10,10,14,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_98={4, {0x00,0x7e,0x48,0x70}}; // b
+const Ks0108Char_t char_98 = {4, {0x00, 0x7e, 0x48, 0x70}}; // b
 
 // original was "99":[0,0,12,2,2,2,12,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_99={4, {0x00,0x38,0x44,0x44}}; // c
+const Ks0108Char_t char_99 = {4, {0x00, 0x38, 0x44, 0x44}}; // c
 
 // original was "100":[0,8,8,12,10,10,14,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_100={4, {0x00,0x70,0x48,0x7e}}; // d
+const Ks0108Char_t char_100 = {4, {0x00, 0x70, 0x48, 0x7e}}; // d
 
 // original was "101":[0,0,4,10,14,2,12,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_101={4, {0x00,0x38,0x54,0x58}}; // e
+const Ks0108Char_t char_101 = {4, {0x00, 0x38, 0x54, 0x58}}; // e
 
 // original was "102":[0,0,4,10,2,6,2,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_102={4, {0x00,0x78,0x24,0x08}}; // f
+const Ks0108Char_t char_102 = {4, {0x00, 0x78, 0x24, 0x08}}; // f
 
 // original was "103":[0,0,12,10,10,14,8,6,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_103={4, {0x00,0xb8,0xa4,0x7c}}; // g
+const Ks0108Char_t char_103 = {4, {0x00, 0xb8, 0xa4, 0x7c}}; // g
 
 // original was "104":[0,2,2,6,10,10,10,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_104={4, {0x00,0x7e,0x08,0x70}}; // h
+const Ks0108Char_t char_104 = {4, {0x00, 0x7e, 0x08, 0x70}}; // h
 
 // original was "105":[0,2,0,2,2,2,2,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_105={2, {0x00,0x7a}}; // i
+const Ks0108Char_t char_105 = {2, {0x00, 0x7a}}; // i
 
 // original was "106":[0,4,0,4,4,4,2,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_106={3, {0x00,0x40,0x3a}}; // j
+const Ks0108Char_t char_106 = {3, {0x00, 0x40, 0x3a}}; // j
 
 // original was "107":[0,2,2,10,6,10,10,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_107={4, {0x00,0x7e,0x10,0x68}}; // k
+const Ks0108Char_t char_107 = {4, {0x00, 0x7e, 0x10, 0x68}}; // k
 
 // original was "108":[0,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_108={2, {0x00,0x7e}}; // l
+const Ks0108Char_t char_108 = {2, {0x00, 0x7e}}; // l
 
 // original was "109":[0,0,22,42,42,42,42,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_109={6, {0x00,0x7c,0x04,0x78,0x04,0x78}}; // m
+const Ks0108Char_t char_109 = {6, {0x00, 0x7c, 0x04, 0x78, 0x04, 0x78}}; // m
 
 // original was "110":[0,0,6,10,10,10,10,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_110={4, {0x00,0x7c,0x04,0x78}}; // n
+const Ks0108Char_t char_110 = {4, {0x00, 0x7c, 0x04, 0x78}}; // n
 
 // original was "111":[0,0,4,10,10,10,4,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_111={4, {0x00,0x38,0x44,0x38}}; // o
+const Ks0108Char_t char_111 = {4, {0x00, 0x38, 0x44, 0x38}}; // o
 
 // original was "112":[0,0,6,10,10,10,6,2,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_112={4, {0x00,0xfc,0x44,0x38}}; // p
+const Ks0108Char_t char_112 = {4, {0x00, 0xfc, 0x44, 0x38}}; // p
 
 // original was "113":[0,0,12,10,10,10,12,8,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_113={4, {0x00,0x38,0x44,0xfc}}; // q
+const Ks0108Char_t char_113 = {4, {0x00, 0x38, 0x44, 0xfc}}; // q
 
 // original was "114":[0,0,6,2,2,2,2,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_114={3, {0x00,0x7c,0x04}}; // r
+const Ks0108Char_t char_114 = {3, {0x00, 0x7c, 0x04}}; // r
 
 // original was "115":[0,0,12,2,4,8,6,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_115={4, {0x00,0x48,0x54,0x24}}; // s
+const Ks0108Char_t char_115 = {4, {0x00, 0x48, 0x54, 0x24}}; // s
 
 // original was "116":[0,2,6,2,2,2,4,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_116={3, {0x00,0x3e,0x44}}; // t
+const Ks0108Char_t char_116 = {3, {0x00, 0x3e, 0x44}}; // t
 
 // original was "117":[0,0,10,10,10,10,12,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_117={4, {0x00,0x3c,0x40,0x7c}}; // u
+const Ks0108Char_t char_117 = {4, {0x00, 0x3c, 0x40, 0x7c}}; // u
 
 // original was "118":[0,0,10,10,10,4,4,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_118={4, {0x00,0x1c,0x60,0x1c}}; // v
+const Ks0108Char_t char_118 = {4, {0x00, 0x1c, 0x60, 0x1c}}; // v
 
 // original was "119":[0,0,42,42,42,20,20,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_119={6, {0x00,0x1c,0x60,0x1c,0x60,0x1c}}; // w
+const Ks0108Char_t char_119 = {6, {0x00, 0x1c, 0x60, 0x1c, 0x60, 0x1c}}; // w
 
 // original was "120":[0,0,10,4,4,4,10,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_120={4, {0x00,0x44,0x38,0x44}}; // x
+const Ks0108Char_t char_120 = {4, {0x00, 0x44, 0x38, 0x44}}; // x
 
 // original was "121":[0,0,10,10,10,4,2,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_121={4, {0x00,0x5c,0x20,0x1c}}; // y
+const Ks0108Char_t char_121 = {4, {0x00, 0x5c, 0x20, 0x1c}}; // y
 
 // original was "122":[0,0,14,8,4,2,14,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_122={4, {0x00,0x64,0x54,0x4c}}; // z
+const Ks0108Char_t char_122 = {4, {0x00, 0x64, 0x54, 0x4c}}; // z
 
 // original was "123":[0,12,4,4,2,4,4,12,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_123={4, {0x00,0x10,0xee,0x82}}; // {
+const Ks0108Char_t char_123 = {4, {0x00, 0x10, 0xee, 0x82}}; // {
 
 // original was "124":[2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_124={2, {0x00,0xff}}; // |
+const Ks0108Char_t char_124 = {2, {0x00, 0xff}}; // |
 
 // original was "125":[0,6,4,4,8,4,4,6,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_125={4, {0x00,0x82,0xee,0x10}}; // }
+const Ks0108Char_t char_125 = {4, {0x00, 0x82, 0xee, 0x10}}; // }
 
 // original was "126":[0,0,4,42,16,0,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_126={6, {0x00,0x08,0x04,0x08,0x10,0x08}}; // ~
+const Ks0108Char_t char_126 = {6, {0x00, 0x08, 0x04, 0x08, 0x10, 0x08}}; // ~
 
 // original was "161":[0,2,0,2,2,2,2,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_161={2, {0x00,0x7a}}; // ¡
+const Ks0108Char_t char_161 = {2, {0x00, 0x7a}}; // ¡
 
 // original was "162":[8,28,42,10,10,42,28,8,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_162={6, {0x00,0x3c,0x42,0xff,0x42,0x24}}; // ¢
+const Ks0108Char_t char_162 = {6, {0x00, 0x3c, 0x42, 0xff, 0x42, 0x24}}; // ¢
 
 // original was "163":[0,24,4,14,4,20,14,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_163={5, {0x00,0x48,0x7c,0x4a,0x22}}; // £
+const Ks0108Char_t char_163 = {5, {0x00, 0x48, 0x7c, 0x4a, 0x22}}; // £
 
 // original was "164":[0,34,28,20,28,34,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_164={6, {0x00,0x22,0x1c,0x14,0x1c,0x22}}; // ¤
+const Ks0108Char_t char_164 = {6, {0x00, 0x22, 0x1c, 0x14, 0x1c, 0x22}}; // ¤
 
 // original was "165":[0,34,34,20,20,8,62,8,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_165={6, {0x00,0x46,0x58,0xe0,0x58,0x46}}; // ¥
+const Ks0108Char_t char_165 = {6, {0x00, 0x46, 0x58, 0xe0, 0x58, 0x46}}; // ¥
 
 // original was "166":[0,2,2,2,0,2,2,2,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_166={2, {0x00,0xee}}; // ¦
+const Ks0108Char_t char_166 = {2, {0x00, 0xee}}; // ¦
 
 // original was "167":[0,28,2,12,18,12,16,14,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_167={5, {0x00,0x94,0xaa,0xaa,0x52}}; // §
+const Ks0108Char_t char_167 = {5, {0x00, 0x94, 0xaa, 0xaa, 0x52}}; // §
 
 // original was "168":[0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_168={4, {0x00,0x02,0x00,0x02}}; // ¨
+const Ks0108Char_t char_168 = {4, {0x00, 0x02, 0x00, 0x02}}; // ¨
 
 // original was "169":[0,56,68,146,138,146,68,56,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_169={8, {0x00,0x38,0x44,0x92,0xaa,0x82,0x44,0x38}}; // ©
+const Ks0108Char_t char_169 = {8, {0x00, 0x38, 0x44, 0x92, 0xaa, 0x82, 0x44, 0x38}}; // ©
 
 // original was "171":[0,36,18,36,0,0,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_171={6, {0x00,0x04,0x0a,0x00,0x04,0x0a}}; // «
+const Ks0108Char_t char_171 = {6, {0x00, 0x04, 0x0a, 0x00, 0x04, 0x0a}}; // «
 
 // original was "172":[0,30,16,16,0,0,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_172={5, {0x00,0x02,0x02,0x02,0x0e}}; // ¬
+const Ks0108Char_t char_172 = {5, {0x00, 0x02, 0x02, 0x02, 0x0e}}; // ¬
 
 // original was "174":[0,56,68,154,186,170,68,56,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_174={8, {0x00,0x38,0x44,0xba,0x9a,0xb2,0x44,0x38}}; // ®
+const Ks0108Char_t char_174 = {8, {0x00, 0x38, 0x44, 0xba, 0x9a, 0xb2, 0x44, 0x38}}; // ®
 
 // original was "175":[0,126,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_175={7, {0x00,0x02,0x02,0x02,0x02,0x02,0x02}}; // ¯
+const Ks0108Char_t char_175 = {7, {0x00, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02}}; // ¯
 
 // original was "176":[0,4,10,4,0,0,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_176={4, {0x00,0x04,0x0a,0x04}}; // °
+const Ks0108Char_t char_176 = {4, {0x00, 0x04, 0x0a, 0x04}}; // °
 
 // original was "177":[0,8,8,62,8,8,0,62,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_177={6, {0x00,0x88,0x88,0xbe,0x88,0x88}}; // ±
+const Ks0108Char_t char_177 = {6, {0x00, 0x88, 0x88, 0xbe, 0x88, 0x88}}; // ±
 
 // original was "178":[0,4,10,8,4,14,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_178={4, {0x00,0x24,0x32,0x2c}}; // ²
+const Ks0108Char_t char_178 = {4, {0x00, 0x24, 0x32, 0x2c}}; // ²
 
 // original was "179":[0,6,8,4,8,14,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_179={4, {0x00,0x22,0x2a,0x34}}; // ³
+const Ks0108Char_t char_179 = {4, {0x00, 0x22, 0x2a, 0x34}}; // ³
 
 // original was "180":[0,4,2,0,0,0,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_180={3, {0x00,0x04,0x02}}; // ´
+const Ks0108Char_t char_180 = {3, {0x00, 0x04, 0x02}}; // ´
 
 // original was "181":[0,10,10,10,22,2,2,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_181={5, {0x00,0x7e,0x10,0x0e,0x10}}; // µ
+const Ks0108Char_t char_181 = {5, {0x00, 0x7e, 0x10, 0x0e, 0x10}}; // µ
 
 // original was "182":[0,28,22,20,20,20,20,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_182={5, {0x00,0x04,0x7e,0x02,0x7e}}; // ¶
+const Ks0108Char_t char_182 = {5, {0x00, 0x04, 0x7e, 0x02, 0x7e}}; // ¶
 
 // original was "183":[0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_183={2, {0x00,0x08}}; // ·
+const Ks0108Char_t char_183 = {2, {0x00, 0x08}}; // ·
 
 // original was "185":[0,6,4,4,4,14,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_185={4, {0x00,0x22,0x3e,0x20}}; // ¹
+const Ks0108Char_t char_185 = {4, {0x00, 0x22, 0x3e, 0x20}}; // ¹
 
 // original was "186":[0,4,10,10,10,4,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_186={4, {0x00,0x1c,0x22,0x1c}}; // º
+const Ks0108Char_t char_186 = {4, {0x00, 0x1c, 0x22, 0x1c}}; // º
 
 // original was "187":[0,18,36,18,0,0,0,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_187={6, {0x00,0x0a,0x04,0x00,0x0a,0x04}}; // »
+const Ks0108Char_t char_187 = {6, {0x00, 0x0a, 0x04, 0x00, 0x0a, 0x04}}; // »
 
 // original was "188":[0,70,36,676,686,912,528,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_188={10, {0x00,0x12,0x1e,0x10,0x60,0x1c,0x02,0x38,0x20,0x78}}; // ¼
+const Ks0108Char_t char_188 = {10, {0x00, 0x12, 0x1e, 0x10, 0x60, 0x1c, 0x02, 0x38, 0x20, 0x78}}; // ¼
 
 // original was "189":[0,38,148,340,272,200,456,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_189={9, {0x00,0x02,0x0e,0x60,0x1c,0x02,0x68,0x64,0x58}}; // ½
+const Ks0108Char_t char_189 = {9, {0x00, 0x02, 0x0e, 0x60, 0x1c, 0x02, 0x68, 0x64, 0x58}}; // ½
 
 // original was "190":[0,70,40,676,680,918,528,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_190={10, {0x00,0x22,0x2a,0x14,0x60,0x1c,0x02,0x38,0x20,0x78}}; // ¾
+const Ks0108Char_t char_190 = {10, {0x00, 0x22, 0x2a, 0x14, 0x60, 0x1c, 0x02, 0x38, 0x20, 0x78}}; // ¾
 
 // original was "191":[0,8,0,8,4,2,34,28,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_191={6, {0x00,0x60,0x90,0x8a,0x80,0x40}}; // ¿
+const Ks0108Char_t char_191 = {6, {0x00, 0x60, 0x90, 0x8a, 0x80, 0x40}}; // ¿
 
 // original was "1025":[20,30,2,2,2,30,2,62,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1025={6, {0x00,0xfe,0xa3,0xa2,0xa3,0x80}}; // Ё
+const Ks0108Char_t char_1025 = {6, {0x00, 0xfe, 0xa3, 0xa2, 0xa3, 0x80}}; // Ё
 
 // original was "1040":[0,24,36,34,34,34,62,34,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1040={6, {0x00,0xf8,0x44,0x42,0x42,0xfc}}; // А
+const Ks0108Char_t char_1040 = {6, {0x00, 0xf8, 0x44, 0x42, 0x42, 0xfc}}; // А
 
 // original was "1041":[0,30,2,30,34,34,34,62,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1041={6, {0x00,0xfe,0x8a,0x8a,0x8a,0xf0}}; // Б
+const Ks0108Char_t char_1041 = {6, {0x00, 0xfe, 0x8a, 0x8a, 0x8a, 0xf0}}; // Б
 
 // original was "1042":[0,30,34,30,34,34,34,62,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1042={6, {0x00,0xfe,0x8a,0x8a,0x8a,0xf4}}; // В
+const Ks0108Char_t char_1042 = {6, {0x00, 0xfe, 0x8a, 0x8a, 0x8a, 0xf4}}; // В
 
 // original was "1043":[0,30,2,2,2,2,2,2,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1043={5, {0x00,0xfe,0x02,0x02,0x02}}; // Г
+const Ks0108Char_t char_1043 = {5, {0x00, 0xfe, 0x02, 0x02, 0x02}}; // Г
 
 // original was "1044":[0,56,36,36,36,36,126,66,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1044={7, {0x00,0xc0,0x7c,0x42,0x42,0x7e,0xc0}}; // Д
+const Ks0108Char_t char_1044 = {7, {0x00, 0xc0, 0x7c, 0x42, 0x42, 0x7e, 0xc0}}; // Д
 
 // original was "1045":[0,30,2,2,30,2,2,62,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1045={6, {0x00,0xfe,0x92,0x92,0x92,0x80}}; // Е
+const Ks0108Char_t char_1045 = {6, {0x00, 0xfe, 0x92, 0x92, 0x92, 0x80}}; // Е
 
 // original was "1046":[0,146,146,84,124,84,146,146,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1046={8, {0x00,0xc6,0x38,0x10,0xfe,0x10,0x38,0xc6}}; // Ж
+const Ks0108Char_t char_1046 = {8, {0x00, 0xc6, 0x38, 0x10, 0xfe, 0x10, 0x38, 0xc6}}; // Ж
 
 // original was "1047":[0,30,32,28,32,32,32,30,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1047={6, {0x00,0x82,0x8a,0x8a,0x8a,0x74}}; // З
+const Ks0108Char_t char_1047 = {6, {0x00, 0x82, 0x8a, 0x8a, 0x8a, 0x74}}; // З
 
 // original was "1048":[0,34,34,50,42,38,34,34,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1048={6, {0x00,0xfe,0x20,0x10,0x08,0xfe}}; // И
+const Ks0108Char_t char_1048 = {6, {0x00, 0xfe, 0x20, 0x10, 0x08, 0xfe}}; // И
 
 // original was "1049":[8,42,34,50,42,38,34,34,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1049={6, {0x00,0xfe,0x20,0x13,0x08,0xfe}}; // Й
+const Ks0108Char_t char_1049 = {6, {0x00, 0xfe, 0x20, 0x13, 0x08, 0xfe}}; // Й
 
 // original was "1050":[0,50,10,6,10,18,34,34,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1050={6, {0x00,0xfe,0x08,0x14,0x22,0xc2}}; // К
+const Ks0108Char_t char_1050 = {6, {0x00, 0xfe, 0x08, 0x14, 0x22, 0xc2}}; // К
 
 // original was "1051":[0,56,36,36,36,36,36,34,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1051={6, {0x00,0x80,0x7c,0x02,0x02,0xfe}}; // Л
+const Ks0108Char_t char_1051 = {6, {0x00, 0x80, 0x7c, 0x02, 0x02, 0xfe}}; // Л
 
 // original was "1052":[0,34,34,54,54,42,42,42,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1052={6, {0x00,0xfe,0x18,0xe0,0x18,0xfe}}; // М
+const Ks0108Char_t char_1052 = {6, {0x00, 0xfe, 0x18, 0xe0, 0x18, 0xfe}}; // М
 
 // original was "1053":[0,34,34,34,62,34,34,34,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1053={6, {0x00,0xfe,0x10,0x10,0x10,0xfe}}; // Н
+const Ks0108Char_t char_1053 = {6, {0x00, 0xfe, 0x10, 0x10, 0x10, 0xfe}}; // Н
 
 // original was "1054":[0,28,34,34,34,34,34,28,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1054={6, {0x00,0x7c,0x82,0x82,0x82,0x7c}}; // О
+const Ks0108Char_t char_1054 = {6, {0x00, 0x7c, 0x82, 0x82, 0x82, 0x7c}}; // О
 
 // original was "1055":[0,62,34,34,34,34,34,34,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1055={6, {0x00,0xfe,0x02,0x02,0x02,0xfe}}; // П
+const Ks0108Char_t char_1055 = {6, {0x00, 0xfe, 0x02, 0x02, 0x02, 0xfe}}; // П
 
 // original was "1056":[0,30,34,34,34,34,30,2,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1056={6, {0x00,0xfe,0x42,0x42,0x42,0x3c}}; // Р
+const Ks0108Char_t char_1056 = {6, {0x00, 0xfe, 0x42, 0x42, 0x42, 0x3c}}; // Р
 
 // original was "1057":[0,60,34,2,2,2,34,60,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1057={6, {0x00,0x7c,0x82,0x82,0x82,0xc6}}; // С
+const Ks0108Char_t char_1057 = {6, {0x00, 0x7c, 0x82, 0x82, 0x82, 0xc6}}; // С
 
 // original was "1058":[0,62,42,8,8,8,8,8,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1058={6, {0x00,0x06,0x02,0xfe,0x02,0x06}}; // Т
+const Ks0108Char_t char_1058 = {6, {0x00, 0x06, 0x02, 0xfe, 0x02, 0x06}}; // Т
 
 // original was "1059":[0,34,34,34,34,20,8,6,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1059={6, {0x00,0x9e,0xa0,0x40,0x20,0x1e}}; // У
+const Ks0108Char_t char_1059 = {6, {0x00, 0x9e, 0xa0, 0x40, 0x20, 0x1e}}; // У
 
 // original was "1060":[0,16,124,146,146,146,124,16,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1060={8, {0x00,0x38,0x44,0x44,0xfe,0x44,0x44,0x38}}; // Ф
+const Ks0108Char_t char_1060 = {8, {0x00, 0x38, 0x44, 0x44, 0xfe, 0x44, 0x44, 0x38}}; // Ф
 
 // original was "1061":[0,34,20,8,8,8,20,34,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1061={6, {0x00,0x82,0x44,0x38,0x44,0x82}}; // Х
+const Ks0108Char_t char_1061 = {6, {0x00, 0x82, 0x44, 0x38, 0x44, 0x82}}; // Х
 
 // original was "1062":[0,34,34,34,34,34,126,64,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1062={7, {0x00,0x7e,0x40,0x40,0x40,0x7e,0xc0}}; // Ц
+const Ks0108Char_t char_1062 = {7, {0x00, 0x7e, 0x40, 0x40, 0x40, 0x7e, 0xc0}}; // Ц
 
 // original was "1063":[0,34,34,34,34,60,32,32,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1063={6, {0x00,0x1e,0x20,0x20,0x20,0xfe}}; // Ч
+const Ks0108Char_t char_1063 = {6, {0x00, 0x1e, 0x20, 0x20, 0x20, 0xfe}}; // Ч
 
 // original was "1064":[0,146,146,146,146,146,146,254,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1064={8, {0x00,0xfe,0x80,0x80,0xfe,0x80,0x80,0xfe}}; // Ш
+const Ks0108Char_t char_1064 = {8, {0x00, 0xfe, 0x80, 0x80, 0xfe, 0x80, 0x80, 0xfe}}; // Ш
 
 // original was "1065":[0,146,146,146,146,146,146,510,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1065={9, {0x00,0xfe,0x80,0x80,0xfe,0x80,0x80,0xfe,0x80}}; // Щ
+const Ks0108Char_t char_1065 = {9, {0x00, 0xfe, 0x80, 0x80, 0xfe, 0x80, 0x80, 0xfe, 0x80}}; // Щ
 
 // original was "1066":[0,6,28,36,36,36,36,28,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1066={6, {0x00,0x02,0xfe,0x84,0x84,0x78}}; // Ъ
+const Ks0108Char_t char_1066 = {6, {0x00, 0x02, 0xfe, 0x84, 0x84, 0x78}}; // Ъ
 
 // original was "1067":[0,66,78,82,82,82,82,94,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1067={7, {0x00,0xfe,0x84,0x84,0xf8,0x00,0xfe}}; // Ы
+const Ks0108Char_t char_1067 = {7, {0x00, 0xfe, 0x84, 0x84, 0xf8, 0x00, 0xfe}}; // Ы
 
 // original was "1068":[0,2,30,34,34,34,34,30,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1068={6, {0x00,0xfe,0x84,0x84,0x84,0x78}}; // Ь
+const Ks0108Char_t char_1068 = {6, {0x00, 0xfe, 0x84, 0x84, 0x84, 0x78}}; // Ь
 
 // original was "1069":[0,30,32,60,32,32,34,30,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1069={6, {0x00,0xc2,0x8a,0x8a,0x8a,0x7c}}; // Э
+const Ks0108Char_t char_1069 = {6, {0x00, 0xc2, 0x8a, 0x8a, 0x8a, 0x7c}}; // Э
 
 // original was "1070":[0,50,74,74,74,78,74,50,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1070={7, {0x00,0xfe,0x20,0x7c,0x82,0x82,0x7c}}; // Ю
+const Ks0108Char_t char_1070 = {7, {0x00, 0xfe, 0x20, 0x7c, 0x82, 0x82, 0x7c}}; // Ю
 
 // original was "1071":[0,60,34,34,34,60,36,34,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1071={6, {0x00,0x9c,0x62,0x22,0x22,0xfe}}; // Я
+const Ks0108Char_t char_1071 = {6, {0x00, 0x9c, 0x62, 0x22, 0x22, 0xfe}}; // Я
 
 // original was "1072":[0,0,0,12,16,28,18,44,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1072={6, {0x00,0x40,0xa8,0xa8,0x70,0x80}}; // а
+const Ks0108Char_t char_1072 = {6, {0x00, 0x40, 0xa8, 0xa8, 0x70, 0x80}}; // а
 
 // original was "1073":[0,0,30,2,12,18,18,12,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1073={5, {0x00,0x6c,0x94,0x94,0x64}}; // б
+const Ks0108Char_t char_1073 = {5, {0x00, 0x6c, 0x94, 0x94, 0x64}}; // б
 
 // original was "1074":[0,0,0,14,18,14,18,14,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1074={5, {0x00,0xf8,0xa8,0xa8,0x50}}; // в
+const Ks0108Char_t char_1074 = {5, {0x00, 0xf8, 0xa8, 0xa8, 0x50}}; // в
 
 // original was "1075":[0,0,0,14,2,2,2,2,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1075={4, {0x00,0xf8,0x08,0x08}}; // г
+const Ks0108Char_t char_1075 = {4, {0x00, 0xf8, 0x08, 0x08}}; // г
 
 // original was "1076":[0,0,0,28,20,20,30,18,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1076={5, {0x00,0xc0,0x78,0x48,0xf8}}; // д
+const Ks0108Char_t char_1076 = {5, {0x00, 0xc0, 0x78, 0x48, 0xf8}}; // д
 
 // original was "1077":[0,0,0,12,18,14,2,12,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1077={5, {0x00,0x70,0xa8,0xa8,0x10}}; // е
+const Ks0108Char_t char_1077 = {5, {0x00, 0x70, 0xa8, 0xa8, 0x10}}; // е
 
 // original was "1078":[0,0,0,42,42,42,28,42,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1078={6, {0x00,0xb8,0x40,0xf8,0x40,0xb8}}; // ж
+const Ks0108Char_t char_1078 = {6, {0x00, 0xb8, 0x40, 0xf8, 0x40, 0xb8}}; // ж
 
 // original was "1079":[0,0,0,12,18,8,18,12,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1079={5, {0x00,0x50,0x88,0xa8,0x50}}; // з
+const Ks0108Char_t char_1079 = {5, {0x00, 0x50, 0x88, 0xa8, 0x50}}; // з
 
 // original was "1080":[0,0,0,18,18,26,22,18,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1080={5, {0x00,0xf8,0x40,0x20,0xf8}}; // и
+const Ks0108Char_t char_1080 = {5, {0x00, 0xf8, 0x40, 0x20, 0xf8}}; // и
 
 // original was "1081":[0,12,0,18,18,26,22,18,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1081={5, {0x00,0xf8,0x42,0x22,0xf8}}; // й
+const Ks0108Char_t char_1081 = {5, {0x00, 0xf8, 0x42, 0x22, 0xf8}}; // й
 
 // original was "1082":[0,0,0,10,6,10,18,18,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1082={5, {0x00,0xf8,0x10,0x28,0xc0}}; // к
+const Ks0108Char_t char_1082 = {5, {0x00, 0xf8, 0x10, 0x28, 0xc0}}; // к
 
 // original was "1083":[0,0,0,28,20,20,20,18,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1083={5, {0x00,0x80,0x78,0x08,0xf8}}; // л
+const Ks0108Char_t char_1083 = {5, {0x00, 0x80, 0x78, 0x08, 0xf8}}; // л
 
 // original was "1084":[0,0,0,34,54,42,42,42,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1084={6, {0x00,0xf8,0x10,0xe0,0x10,0xf8}}; // м
+const Ks0108Char_t char_1084 = {6, {0x00, 0xf8, 0x10, 0xe0, 0x10, 0xf8}}; // м
 
 // original was "1085":[0,0,0,18,18,30,18,18,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1085={5, {0x00,0xf8,0x20,0x20,0xf8}}; // н
+const Ks0108Char_t char_1085 = {5, {0x00, 0xf8, 0x20, 0x20, 0xf8}}; // н
 
 // original was "1086":[0,0,0,12,18,18,18,12,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1086={5, {0x00,0x70,0x88,0x88,0x70}}; // о
+const Ks0108Char_t char_1086 = {5, {0x00, 0x70, 0x88, 0x88, 0x70}}; // о
 
 // original was "1087":[0,0,0,30,18,18,18,18,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1087={5, {0x00,0xf8,0x08,0x08,0xf8}}; // п
+const Ks0108Char_t char_1087 = {5, {0x00, 0xf8, 0x08, 0x08, 0xf8}}; // п
 
 // original was "1088":[0,0,0,14,18,18,14,2,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1088={5, {0x00,0xf8,0x48,0x48,0x30}}; // р
+const Ks0108Char_t char_1088 = {5, {0x00, 0xf8, 0x48, 0x48, 0x30}}; // р
 
 // original was "1089":[0,0,0,28,2,2,2,28,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1089={5, {0x00,0x70,0x88,0x88,0x88}}; // с
+const Ks0108Char_t char_1089 = {5, {0x00, 0x70, 0x88, 0x88, 0x88}}; // с
 
 // original was "1090":[0,0,0,14,4,4,4,4,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1090={4, {0x00,0x08,0xf8,0x08}}; // т
+const Ks0108Char_t char_1090 = {4, {0x00, 0x08, 0xf8, 0x08}}; // т
 
 // original was "1091":[0,0,0,18,18,20,8,6,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1091={5, {0x00,0x98,0xa0,0x40,0x38}}; // у
+const Ks0108Char_t char_1091 = {5, {0x00, 0x98, 0xa0, 0x40, 0x38}}; // у
 
 // original was "1092":[0,0,8,28,42,42,28,8,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1092={6, {0x00,0x30,0x48,0xfc,0x48,0x30}}; // ф
+const Ks0108Char_t char_1092 = {6, {0x00, 0x30, 0x48, 0xfc, 0x48, 0x30}}; // ф
 
 // original was "1093":[0,0,0,18,12,12,12,18,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1093={5, {0x00,0x88,0x70,0x70,0x88}}; // х
+const Ks0108Char_t char_1093 = {5, {0x00, 0x88, 0x70, 0x70, 0x88}}; // х
 
 // original was "1094":[0,0,0,18,18,18,18,62,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1094={6, {0x00,0xf8,0x80,0x80,0xf8,0x80}}; // ц
+const Ks0108Char_t char_1094 = {6, {0x00, 0xf8, 0x80, 0x80, 0xf8, 0x80}}; // ц
 
 // original was "1095":[0,0,0,18,18,18,28,16,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1095={5, {0x00,0x38,0x40,0x40,0xf8}}; // ч
+const Ks0108Char_t char_1095 = {5, {0x00, 0x38, 0x40, 0x40, 0xf8}}; // ч
 
 // original was "1096":[0,0,0,34,34,42,42,62,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1096={6, {0x00,0xf8,0x80,0xe0,0x80,0xf8}}; // ш
+const Ks0108Char_t char_1096 = {6, {0x00, 0xf8, 0x80, 0xe0, 0x80, 0xf8}}; // ш
 
 // original was "1097":[0,0,0,34,34,42,42,126,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1097={7, {0x00,0xf8,0x80,0xe0,0x80,0xf8,0x80}}; // щ
+const Ks0108Char_t char_1097 = {7, {0x00, 0xf8, 0x80, 0xe0, 0x80, 0xf8, 0x80}}; // щ
 
 // original was "1098":[0,0,0,6,4,28,36,28,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1098={6, {0x00,0x08,0xf8,0xa0,0xa0,0x40}}; // ъ
+const Ks0108Char_t char_1098 = {6, {0x00, 0x08, 0xf8, 0xa0, 0xa0, 0x40}}; // ъ
 
 // original was "1099":[0,0,0,34,34,46,42,46,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1099={6, {0x00,0xf8,0xa0,0xe0,0x00,0xf8}}; // ы
+const Ks0108Char_t char_1099 = {6, {0x00, 0xf8, 0xa0, 0xe0, 0x00, 0xf8}}; // ы
 
 // original was "1100":[0,0,0,2,2,14,18,14,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1100={5, {0x00,0xf8,0xa0,0xa0,0x40}}; // ь
+const Ks0108Char_t char_1100 = {5, {0x00, 0xf8, 0xa0, 0xa0, 0x40}}; // ь
 
 // original was "1101":[0,0,0,14,16,30,16,14,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1101={5, {0x00,0xa8,0xa8,0xa8,0x70}}; // э
+const Ks0108Char_t char_1101 = {5, {0x00, 0xa8, 0xa8, 0xa8, 0x70}}; // э
 
 // original was "1102":[0,0,0,50,74,78,74,50,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1102={7, {0x00,0xf8,0x20,0x70,0x88,0x88,0x70}}; // ю
+const Ks0108Char_t char_1102 = {7, {0x00, 0xf8, 0x20, 0x70, 0x88, 0x88, 0x70}}; // ю
 
 // original was "1103":[0,0,0,28,18,18,28,18,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1103={5, {0x00,0xb0,0x48,0x48,0xf8}}; // я
+const Ks0108Char_t char_1103 = {5, {0x00, 0xb0, 0x48, 0x48, 0xf8}}; // я
 
 // original was "1105":[0,20,0,12,18,14,2,12,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_1105={5, {0x00,0x70,0xaa,0xa8,0x12}}; // ё
+const Ks0108Char_t char_1105 = {5, {0x00, 0x70, 0xaa, 0xa8, 0x12}}; // ё
 
 // original was "8364":[0,56,4,30,4,30,4,56,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_8364={6, {0x00,0x28,0x7c,0xaa,0xaa,0x82}}; // €
+const Ks0108Char_t char_8364 = {6, {0x00, 0x28, 0x7c, 0xaa, 0xaa, 0x82}}; // €
 
 
 const uint16_t charTableSize = 189;
 
 
 const uint16_t charTable[] = {
-        33,34,35,36,// !, ", #, $,
-        37,38,39,40,// %, &, ', (,
-        41,42,43,44,// ), *, +, ,,
-        45,46,47,48,// -, ., /, 0,
-        49,50,51,52,// 1, 2, 3, 4,
-        53,54,55,56,// 5, 6, 7, 8,
-        57,58,59,60,// 9, :, ;, <,
-        61,62,63,64,// =, >, ?, @,
-        65,66,67,68,// A, B, C, D,
-        69,70,71,72,// E, F, G, H,
-        73,74,75,76,// I, J, K, L,
-        77,78,79,80,// M, N, O, P,
-        81,82,83,84,// Q, R, S, T,
-        85,86,87,88,// U, V, W, X,
-        89,90,91,92,// Y, Z, [, \,
-        93,94,95,96,// ], ^, _, `,
-        97,98,99,100,// a, b, c, d,
-        101,102,103,104,// e, f, g, h,
-        105,106,107,108,// i, j, k, l,
-        109,110,111,112,// m, n, o, p,
-        113,114,115,116,// q, r, s, t,
-        117,118,119,120,// u, v, w, x,
-        121,122,123,124,// y, z, {, |,
-        125,126,161,162,// }, ~, ¡, ¢,
-        163,164,165,166,// £, ¤, ¥, ¦,
-        167,168,169,171,// §, ¨, ©, «,
-        172,174,175,176,// ¬, ®, ¯, °,
-        177,178,179,180,// ±, ², ³, ´,
-        181,182,183,185,// µ, ¶, ·, ¹,
-        186,187,188,189,// º, », ¼, ½,
-        190,191,1025,1040,// ¾, ¿, Ё, А,
-        1041,1042,1043,1044,// Б, В, Г, Д,
-        1045,1046,1047,1048,// Е, Ж, З, И,
-        1049,1050,1051,1052,// Й, К, Л, М,
-        1053,1054,1055,1056,// Н, О, П, Р,
-        1057,1058,1059,1060,// С, Т, У, Ф,
-        1061,1062,1063,1064,// Х, Ц, Ч, Ш,
-        1065,1066,1067,1068,// Щ, Ъ, Ы, Ь,
-        1069,1070,1071,1072,// Э, Ю, Я, а,
-        1073,1074,1075,1076,// б, в, г, д,
-        1077,1078,1079,1080,// е, ж, з, и,
-        1081,1082,1083,1084,// й, к, л, м,
-        1085,1086,1087,1088,// н, о, п, р,
-        1089,1090,1091,1092,// с, т, у, ф,
-        1093,1094,1095,1096,// х, ц, ч, ш,
-        1097,1098,1099,1100,// щ, ъ, ы, ь,
-        1101,1102,1103,1105,// э, ю, я, ё,
-        8364};
+    33, 34, 35, 36,// !, ", #, $,
+    37, 38, 39, 40,// %, &, ', (,
+    41, 42, 43, 44,// ), *, +, ,,
+    45, 46, 47, 48,// -, ., /, 0,
+    49, 50, 51, 52,// 1, 2, 3, 4,
+    53, 54, 55, 56,// 5, 6, 7, 8,
+    57, 58, 59, 60,// 9, :, ;, <,
+    61, 62, 63, 64,// =, >, ?, @,
+    65, 66, 67, 68,// A, B, C, D,
+    69, 70, 71, 72,// E, F, G, H,
+    73, 74, 75, 76,// I, J, K, L,
+    77, 78, 79, 80,// M, N, O, P,
+    81, 82, 83, 84,// Q, R, S, T,
+    85, 86, 87, 88,// U, V, W, X,
+    89, 90, 91, 92,// Y, Z, [, \,
+    93, 94, 95, 96,// ], ^, _, `,
+    97, 98, 99, 100,// a, b, c, d,
+    101, 102, 103, 104,// e, f, g, h,
+    105, 106, 107, 108,// i, j, k, l,
+    109, 110, 111, 112,// m, n, o, p,
+    113, 114, 115, 116,// q, r, s, t,
+    117, 118, 119, 120,// u, v, w, x,
+    121, 122, 123, 124,// y, z, {, |,
+    125, 126, 161, 162,// }, ~, ¡, ¢,
+    163, 164, 165, 166,// £, ¤, ¥, ¦,
+    167, 168, 169, 171,// §, ¨, ©, «,
+    172, 174, 175, 176,// ¬, ®, ¯, °,
+    177, 178, 179, 180,// ±, ², ³, ´,
+    181, 182, 183, 185,// µ, ¶, ·, ¹,
+    186, 187, 188, 189,// º, », ¼, ½,
+    190, 191, 1025, 1040,// ¾, ¿, Ё, А,
+    1041, 1042, 1043, 1044,// Б, В, Г, Д,
+    1045, 1046, 1047, 1048,// Е, Ж, З, И,
+    1049, 1050, 1051, 1052,// Й, К, Л, М,
+    1053, 1054, 1055, 1056,// Н, О, П, Р,
+    1057, 1058, 1059, 1060,// С, Т, У, Ф,
+    1061, 1062, 1063, 1064,// Х, Ц, Ч, Ш,
+    1065, 1066, 1067, 1068,// Щ, Ъ, Ы, Ь,
+    1069, 1070, 1071, 1072,// Э, Ю, Я, а,
+    1073, 1074, 1075, 1076,// б, в, г, д,
+    1077, 1078, 1079, 1080,// е, ж, з, и,
+    1081, 1082, 1083, 1084,// й, к, л, м,
+    1085, 1086, 1087, 1088,// н, о, п, р,
+    1089, 1090, 1091, 1092,// с, т, у, ф,
+    1093, 1094, 1095, 1096,// х, ц, ч, ш,
+    1097, 1098, 1099, 1100,// щ, ъ, ы, ь,
+    1101, 1102, 1103, 1105,// э, ю, я, ё,
+    8364};
 
 
-const Ks0108Char_t* chars[] = {
-        &char_33, &char_34, &char_35, &char_36, &char_37, &char_38, &char_39, &char_40, &char_41, &char_42, &char_43, &char_44,
-        &char_45, &char_46, &char_47, &char_48, &char_49, &char_50, &char_51, &char_52, &char_53, &char_54, &char_55, &char_56,
-        &char_57, &char_58, &char_59, &char_60, &char_61, &char_62, &char_63, &char_64, &char_65, &char_66, &char_67, &char_68,
-        &char_69, &char_70, &char_71, &char_72, &char_73, &char_74, &char_75, &char_76, &char_77, &char_78, &char_79, &char_80,
-        &char_81, &char_82, &char_83, &char_84, &char_85, &char_86, &char_87, &char_88, &char_89, &char_90, &char_91, &char_92,
-        &char_93, &char_94, &char_95, &char_96, &char_97, &char_98, &char_99, &char_100, &char_101, &char_102, &char_103, &char_104,
-        &char_105, &char_106, &char_107, &char_108, &char_109, &char_110, &char_111, &char_112, &char_113, &char_114, &char_115, &char_116,
-        &char_117, &char_118, &char_119, &char_120, &char_121, &char_122, &char_123, &char_124, &char_125, &char_126, &char_161, &char_162,
-        &char_163, &char_164, &char_165, &char_166, &char_167, &char_168, &char_169, &char_171, &char_172, &char_174, &char_175, &char_176,
-        &char_177, &char_178, &char_179, &char_180, &char_181, &char_182, &char_183, &char_185, &char_186, &char_187, &char_188, &char_189,
-        &char_190, &char_191, &char_1025, &char_1040, &char_1041, &char_1042, &char_1043, &char_1044, &char_1045, &char_1046, &char_1047, &char_1048,
-        &char_1049, &char_1050, &char_1051, &char_1052, &char_1053, &char_1054, &char_1055, &char_1056, &char_1057, &char_1058, &char_1059, &char_1060,
-        &char_1061, &char_1062, &char_1063, &char_1064, &char_1065, &char_1066, &char_1067, &char_1068, &char_1069, &char_1070, &char_1071, &char_1072,
-        &char_1073, &char_1074, &char_1075, &char_1076, &char_1077, &char_1078, &char_1079, &char_1080, &char_1081, &char_1082, &char_1083, &char_1084,
-        &char_1085, &char_1086, &char_1087, &char_1088, &char_1089, &char_1090, &char_1091, &char_1092, &char_1093, &char_1094, &char_1095, &char_1096,
-        &char_1097, &char_1098, &char_1099, &char_1100, &char_1101, &char_1102, &char_1103, &char_1105, &char_8364};
+const Ks0108Char_t *chars[] = {
+    &char_33, &char_34, &char_35, &char_36, &char_37, &char_38, &char_39, &char_40, &char_41, &char_42, &char_43,
+    &char_44,
+    &char_45, &char_46, &char_47, &char_48, &char_49, &char_50, &char_51, &char_52, &char_53, &char_54, &char_55,
+    &char_56,
+    &char_57, &char_58, &char_59, &char_60, &char_61, &char_62, &char_63, &char_64, &char_65, &char_66, &char_67,
+    &char_68,
+    &char_69, &char_70, &char_71, &char_72, &char_73, &char_74, &char_75, &char_76, &char_77, &char_78, &char_79,
+    &char_80,
+    &char_81, &char_82, &char_83, &char_84, &char_85, &char_86, &char_87, &char_88, &char_89, &char_90, &char_91,
+    &char_92,
+    &char_93, &char_94, &char_95, &char_96, &char_97, &char_98, &char_99, &char_100, &char_101, &char_102, &char_103,
+    &char_104,
+    &char_105, &char_106, &char_107, &char_108, &char_109, &char_110, &char_111, &char_112, &char_113, &char_114,
+    &char_115, &char_116,
+    &char_117, &char_118, &char_119, &char_120, &char_121, &char_122, &char_123, &char_124, &char_125, &char_126,
+    &char_161, &char_162,
+    &char_163, &char_164, &char_165, &char_166, &char_167, &char_168, &char_169, &char_171, &char_172, &char_174,
+    &char_175, &char_176,
+    &char_177, &char_178, &char_179, &char_180, &char_181, &char_182, &char_183, &char_185, &char_186, &char_187,
+    &char_188, &char_189,
+    &char_190, &char_191, &char_1025, &char_1040, &char_1041, &char_1042, &char_1043, &char_1044, &char_1045,
+    &char_1046, &char_1047, &char_1048,
+    &char_1049, &char_1050, &char_1051, &char_1052, &char_1053, &char_1054, &char_1055, &char_1056, &char_1057,
+    &char_1058, &char_1059, &char_1060,
+    &char_1061, &char_1062, &char_1063, &char_1064, &char_1065, &char_1066, &char_1067, &char_1068, &char_1069,
+    &char_1070, &char_1071, &char_1072,
+    &char_1073, &char_1074, &char_1075, &char_1076, &char_1077, &char_1078, &char_1079, &char_1080, &char_1081,
+    &char_1082, &char_1083, &char_1084,
+    &char_1085, &char_1086, &char_1087, &char_1088, &char_1089, &char_1090, &char_1091, &char_1092, &char_1093,
+    &char_1094, &char_1095, &char_1096,
+    &char_1097, &char_1098, &char_1099, &char_1100, &char_1101, &char_1102, &char_1103, &char_1105, &char_8364};
 
 #endif //TMONITOR_KS0108_FONT
 // это окончание автоматически сгенерированного файла шрифта для библиотеки ks0108

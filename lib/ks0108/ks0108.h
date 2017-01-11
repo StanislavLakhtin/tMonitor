@@ -10,27 +10,26 @@
 
 // uint32_t v=0xdeadc0de;
 // printf("g1 %x\n",get_bits(&v,8,10));
-#define get_bits(var,offset,length) (((*(var))>>offset)& (1<<length)-1)
-#define set_bits(var,offset,length,value) ((*(var)&(0xffffffff ^ ((1<<length)-1)<<offset)) | value<<offset)
+#define get_bits(var, offset, length) (((*(var))>>offset)& (1<<length)-1)
+#define set_bits(var, offset, length, value) ((*(var)&(0xffffffff ^ ((1<<length)-1)<<offset)) | value<<offset)
 // printf("g1 %x\n",set_bits(&v,4,16,0x3133));
 
 #ifndef _swap_uint16_t
 #define _swap_uint16_t(a, b) { uint16_t t = a; a = b; b = t; }
 #endif
 
-typedef struct _PortStruct
-{
-    uint8_t db: 8;
-    uint8_t cs:2;
-    uint8_t e:1;
-    uint8_t rw: 1;
-    uint8_t a0: 1;
-    uint8_t unused0: 3;
+typedef struct _PortStruct {
+  uint8_t db: 8;
+  uint8_t cs:2;
+  uint8_t e:1;
+  uint8_t rw: 1;
+  uint8_t a0: 1;
+  uint8_t unused0: 3;
 } PortStruct_t;
 
 typedef union _u_PortStruct {
-    PortStruct_t p;
-    uint16_t raw;
+  PortStruct_t p;
+  uint16_t raw;
 } u_PortStruct_t;
 
 /*
@@ -85,19 +84,31 @@ typedef union _u_PortStruct {
 #define CHIP2_PIN GPIO9
 
 void ks0108_init();
+
 void ks0108_CS(uint8_t);
+
 void ks0108_sendCmdOrData(uint8_t cs, uint8_t rs, uint8_t rw, uint8_t data);
+
 void delayMs(uint32_t mks);
+
 void ks0108_waitReady(uint8_t chip, uint16_t waitLines);
+
 void ks0108_setPage(uint8_t, uint8_t);
+
 void ks0108_setAddress(uint8_t, uint8_t);
+
 uint8_t ks0108_readMemoryAt(uint8_t x, uint8_t y);
+
 uint8_t ks0108_receiveData(uint8_t);
+
 void ks0108_drawPixel(uint8_t x, uint8_t y, uint8_t color);
-void ks0108_drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,  uint8_t color);
-void ks0108_drawText(uint8_t x, uint8_t y, uint8_t color, wchar_t * text);
+
+void ks0108_drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t color);
+
+void ks0108_drawText(uint8_t x, uint8_t y, uint8_t color, wchar_t *text);
 
 void ks0108_repaint(uint8_t mode);
+
 void ks0108_paint(uint8_t pattern);
 
 #endif //TMONITOR_KS0108
