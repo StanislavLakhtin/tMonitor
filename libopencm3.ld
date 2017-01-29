@@ -5,4 +5,3 @@ MEMORY
 }
 
 INCLUDE libopencm3_stm32f1.ld
-

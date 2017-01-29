@@ -1,6 +1,3 @@
-[submodule "lib/atomthreads"]
-	path = lib/atomthreads
-	url = https://github.com/kelvinlawson/atomthreads.git
 [submodule "lib/onewire"]
 	path = lib/onewire
 	url = git@github.com:StanislavLakhtin/stm32-DS18B20.git

@@ -5,7 +5,7 @@
 #include "ks0108.h"
 #include "ks0108_font.h"
 
-Ks0108Char_t spaceChar = {2, {0x00, 0x00}};
+const Ks0108Char_t spaceChar = {2, {0x00, 0x00}};
 
 void ks0108_strob();
 
@@ -187,7 +187,7 @@ void ks0108_setAddress(uint8_t chip, uint8_t address) {
   ks0108_sendCmdOrData(chip, 0, 0, data);
 }
 
-Ks0108Char_t *getCharacter(uint16_t s) {
+const Ks0108Char_t *getCharacter(uint16_t s) {
   int i = 0;
   for (; i < charTableSize; ++i) {
     if (charTable[i] == s)
@@ -219,8 +219,28 @@ uint8_t ks0108_readMemoryAt(uint8_t x, uint8_t y) {//прочитать данн
   return ks0108_receiveData(chip);
 }
 
-void
-ks0108_drawText(uint8_t x, uint8_t y, uint8_t color, wchar_t *text) { //x и y -- верхний правый угол выводимого текста
+uint16_t ks0108_textLength(wchar_t *text) {
+    uint16_t length = 0;
+    uint16_t index = 0;
+    uint16_t symbol;
+    do {
+        symbol = text[index];
+        Ks0108Char_t *charCur = getCharacter(symbol);
+        length += charCur->size;
+        index += 1;
+    } while (symbol != 0x00);
+    return length;
+}
+
+void ks0108_drawInt(uint8_t x, uint8_t y, uint8_t color, int num, wchar_t *format) {
+  if (format==NULL)
+    format = L"%d";
+  wchar_t buffer[30];
+  swprintf(buffer, 30, format, num);
+  ks0108_drawText(x,y,color,buffer);
+}
+
+void ks0108_drawText(uint8_t x, uint8_t y, uint8_t color, wchar_t *text) { //x и y -- верхний правый угол выводимого текста
   gpio_clear(GPIOA, GPIO_ALL);
   //использовать x и y для настройки на чип, страницу и адрес
   int charPos = 0;

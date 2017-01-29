@@ -111,6 +111,10 @@ void ks0108_drawCircle(int x, int y, int radius, uint8_t color);
 
 void ks0108_drawText(uint8_t x, uint8_t y, uint8_t color, wchar_t *text);
 
+void ks0108_drawInt(uint8_t x, uint8_t y, uint8_t color, int num, wchar_t *format);
+
+uint16_t ks0108_textLength(wchar_t *text);
+
 void ks0108_repaint(uint8_t mode);
 
 void ks0108_paint(uint8_t pattern);

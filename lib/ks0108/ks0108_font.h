@@ -191,7 +191,7 @@ const Ks0108Char_t char_90 = {5, {0x00, 0x62, 0x52, 0x4a, 0x46}}; // Z
 const Ks0108Char_t char_91 = {3, {0x00, 0x7e, 0x42}}; // [
 
 // original was "92":[0,2,2,4,4,8,8,0,0,0,0,0,0,0,0,0
-const Ks0108Char_t char_92 = {4, {0x00, 0x06, 0x18, 0x60}}; // \
+const Ks0108Char_t char_92 = {4, {0x00, 0x06, 0x18, 0x60}}; // backaslash
 
 // original was "93":[0,6,4,4,4,4,6,0,0,0,0,0,0,0,0,0
 const Ks0108Char_t char_93 = {3, {0x00, 0x42, 0x7e}}; // ]

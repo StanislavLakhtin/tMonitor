@@ -2,35 +2,62 @@
 // Created by Stanislav Lakhtin on 19/11/2016.
 //
 
-#include <libopencm3/stm32/rcc.h>
-
 #define ONEWIRE_USART3
 #define MAXDEVICES_ON_THE_BUS 3
 
 #include "OneWire.h"
 #include "ks0108.h"
 
-extern int board_setup(void);
+static void clock_setup(void)
+{
+  rcc_clock_setup_in_hse_8mhz_out_72mhz();
+
+  rcc_periph_clock_enable(RCC_GPIOA);
+  rcc_periph_clock_enable(RCC_GPIOB);
+  rcc_periph_clock_enable(RCC_GPIOC);
+
+  rcc_periph_clock_enable(RCC_AFIO);
+
+  rcc_periph_clock_enable(RCC_USART3);
+}
+
+static void gpio_setup(void) {
+  nvic_enable_irq(NVIC_USART3_IRQ);
+
+  gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_10_MHZ,
+                GPIO_CNF_OUTPUT_PUSHPULL, GPIO_ALL);
+
+  gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_10_MHZ,
+                GPIO_CNF_OUTPUT_ALTFN_OPENDRAIN, GPIO_USART3_TX | GPIO_USART3_RX);
+
+  gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_10_MHZ,
+                GPIO_CNF_OUTPUT_PUSHPULL, GPIO0); //LCD(KS0108) RESET PIN
+
+  gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_10_MHZ,
+                GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
+
+  gpio_set(GPIOB, GPIO0);
+
+  AFIO_MAPR |= AFIO_MAPR_SWJ_CFG_FULL_SWJ_NO_JNTRST;
+}
 
 void shortDelay(uint32_t);
-
 void test01(uint8_t color); //линии из точек
-
 void test02(uint8_t color); //рисование точками спирали
-
 void test03(); //вывод текста
-
 void test04(uint8_t color); //рисование окружности
-
 void test05(); //управление Start Line на каждом из чипов
-
 void test06(); //позиционирование текста по любому адресу
-
 void test07();
+void testDS18B20(); //тест с использованием библиотеки для DS18x20
+
+OneWire ow;
 
 int main(void) {
 
-  board_setup();
+  clock_setup();
+  gpio_setup();
+
   ks0108_init();
 
   while (1) {
@@ -39,7 +66,7 @@ int main(void) {
     shortDelay(8000000);
     test02(WHITE); // спираль из точек
     shortDelay(8000000);
-    test01(BLACK);
+    /*test01(BLACK);
     shortDelay(8000000);
     test01(WHITE);
     shortDelay(8000000);
@@ -54,6 +81,9 @@ int main(void) {
     test06();
     shortDelay(8000000);
     test07();
+    shortDelay(8000000);*/
+    ks0108_paint(0);
+    testDS18B20();
     shortDelay(8000000);
   }
   /* В любых нормальных обстоятельствах мы никогда не попадём сюда */
@@ -142,7 +172,7 @@ void test06() {
       {L"т", 56,6,0},
       {L",", 61,5,1},
       {L"М", 65,5,3},
-      {L"И", 75,13,0},
+      {L"И", 75,4,0},
       {L"Р", 83,3,1},
       {L"!", 91,3,3},
   };
@@ -180,28 +210,44 @@ void test06() {
   } while (conc);
 }
 
+void testDS18B20() {
+  ow.usart = USART3;
+  wchar_t *sT = L"Количество: ";
+  wchar_t buffer[30];
+  uint8_t offsetX = 10;
+  uint8_t lHeight = 8;
+  if (owResetCmd(&ow) != ONEWIRE_NOBODY) {
+    ks0108_drawText(offsetX, 0, BLACK, L"Найдены сенсоры на шине");
+    ks0108_drawText(offsetX, lHeight, BLACK, sT);
+    uint8_t cnt = owSearchCmd(&ow);
+    ks0108_drawInt(offsetX+ks0108_textLength(sT), lHeight, BLACK, cnt, L"%d");
+  } else {
+    ks0108_drawText(10,10,BLACK,L"Никого нет");
+  }
+}
+
 void test07() {
   ks0108_paint(0);
-  uint8_t i=0;
+  int16_t i=0, ii;
   wchar_t buffer[30];
-  wchar_t *format0 = L"Форматирование %+00d";
-  wchar_t *format1 = L"Форматирование %d";
-  wchar_t *format2 = L"Форматирование %#04X";
-
-  for (;i<200;i++) {
-    swprintf(buffer, 30, format0, i);
-    ks0108_drawText(12,24,BLACK, buffer);
-    swprintf(buffer, 30, format1, i);
-    ks0108_drawText(12,32,BLACK, buffer);
-    swprintf(buffer, 30, format2, i);
-    ks0108_drawText(12,40,BLACK, buffer);
+  uint8_t ys[] = {24, 32, 40};
+  wchar_t *justString = L"Форматирование:";
+  wchar_t *format[] = {L"%+00d", L"%d", L"%#04X"};
+  uint8_t offset = 12;
+  for (;i<3;i++){
+    ks0108_drawText(offset, ys[i], BLACK, justString);
+  }
+  uint16_t jsLength = offset+ks0108_textLength(justString);
+  for (ii=254;ii>-100;ii--){
+    for (i = 0;i<3;i++){
+      swprintf(buffer, 30, format[i], ii);
+      ks0108_drawText(jsLength,ys[i], BLACK, buffer);
+    }
     shortDelay(400000);
-    swprintf(buffer, 30, format0, i);
-    ks0108_drawText(12,24,WHITE, buffer);
-    swprintf(buffer, 30, format1, i);
-    ks0108_drawText(12,32,WHITE, buffer);
-    swprintf(buffer, 30, format2, i);
-    ks0108_drawText(12,40,WHITE, buffer);
+    for (i = 0;i<3;i++){
+      swprintf(buffer, 30, format[i], ii);
+      ks0108_drawText(jsLength,ys[i], WHITE, buffer);
+    }
   }
 }
 
