@@ -9,26 +9,21 @@ ENDIF(NOT CMAKE_CROSSCOMPILING)
 
 add_definitions(-DSTM32F1)
 
-set(ATOMTHREADS ${CMAKE_SOURCE_DIR}/lib/onewire)
-set(ATOMTHREADS_PORTROOT ${ATOMTHREADS}/ports/cortex-m)
 set(KS0108_ROOT ${CMAKE_SOURCE_DIR}/lib/ks0108)
 
-set(LIBOPENCM3_ROOT ${ATOMTHREADS_PORTROOT}/libopencm3)
+set(LIBOPENCM3_ROOT ${CMAKE_SOURCE_DIR}/lib/onewire/libopencm3)
 set(ONEWIRE_ROOT ${CMAKE_SOURCE_DIR}/lib/onewire)
 
 #file(GLOB_RECURSE USER_SOURCES src/*.c)
 
 include_directories(
         ${LIBOPENCM3_ROOT}/include
-        ${ATOMTHREADS}/kernel
-        ${ATOMTHREADS_PORTROOT}
         ${ONEWIRE_ROOT}/src
         ${KS0108_ROOT}
         inc)
 
 link_directories(
-        ${LIBOPENCM3_ROOT}/lib
-        ${ATOMTHREADS_PORTROOT}/build)
+        ${LIBOPENCM3_ROOT}/lib)
 
 set(STM32F1_FLAGS "-mcpu=cortex-m3 -mthumb -mthumb-interwork -msoft-float")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall ${STM32F1_FLAGS} -Os -ffunction-sections -fdata-sections")

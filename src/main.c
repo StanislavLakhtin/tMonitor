@@ -5,6 +5,7 @@
 #define ONEWIRE_USART3
 #define MAXDEVICES_ON_THE_BUS 3
 
+#include <OneWire.h>
 #include "OneWire.h"
 #include "ks0108.h"
 
@@ -28,7 +29,7 @@ static void gpio_setup(void) {
                 GPIO_CNF_OUTPUT_PUSHPULL, GPIO_ALL);
 
   gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_10_MHZ,
-                GPIO_CNF_OUTPUT_ALTFN_OPENDRAIN, GPIO_USART3_TX | GPIO_USART3_RX);
+                GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO_USART3_TX);
 
   gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_10_MHZ,
                 GPIO_CNF_OUTPUT_PUSHPULL, GPIO0); //LCD(KS0108) RESET PIN
@@ -39,6 +40,17 @@ static void gpio_setup(void) {
   gpio_set(GPIOB, GPIO0);
 
   AFIO_MAPR |= AFIO_MAPR_SWJ_CFG_FULL_SWJ_NO_JNTRST;
+}
+
+void usart3_isr(void) {
+  /* Проверяем, что мы вызвали прерывание из-за RXNE. */
+  if (((USART_CR1(USART3) & USART_CR1_RXNEIE) != 0) &&
+      ((USART_SR(USART3) & USART_SR_RXNE) != 0)) {
+
+    /* Получаем данные из периферии и сбрасываем флаг*/
+    rc_buffer[2] = usart_recv_blocking(USART3);
+    recvFlag &= ~(1 << 2);
+  }
 }
 
 void shortDelay(uint32_t);
@@ -214,13 +226,39 @@ void testDS18B20() {
   ow.usart = USART3;
   wchar_t *sT = L"Количество: ";
   wchar_t buffer[30];
-  uint8_t offsetX = 10;
+  uint8_t offsetX = 4;
   uint8_t lHeight = 8;
   if (owResetCmd(&ow) != ONEWIRE_NOBODY) {
     ks0108_drawText(offsetX, 0, BLACK, L"Найдены сенсоры на шине");
     ks0108_drawText(offsetX, lHeight, BLACK, sT);
-    uint8_t cnt = owSearchCmd(&ow);
+    uint8_t cnt = owScanCmd(&ow);
     ks0108_drawInt(offsetX+ks0108_textLength(sT), lHeight, BLACK, cnt, L"%d");
+    int i = 0;
+    for (; i<cnt; i++) {
+      wchar_t t[30];
+      Temperature temp;
+      RomCode *r = &ow.ids[i];
+      switch (ow.ids[i].family) {
+        case DS18B20:
+          temp = readTemperature(&ow, &ow.ids[i], true);
+          swprintf(buffer, 40, L"(DS18B20:%02x %02x %02x %02x %02x %02x) температура %+000d.%d",
+           r->code[0], r->code[1], r->code[2],
+           r->code[3], r->code[4], r->code[5], temp.inCelsus, temp.frac);
+          break;
+        case DS18S20:
+          temp = readTemperature(&ow, &ow.ids[i], true);
+          swprintf(buffer, 40, L"(DS18S20:%02x %02x %02x %02x %02x %02x) температура %+000d.%d",
+                   r->code[0], r->code[1], r->code[2],
+                   r->code[3], r->code[4], r->code[5], temp.inCelsus, temp.frac);
+          break;
+        default:
+          swprintf(buffer, 40, L"(Unknown:%02x %02x %02x %02x %02x %02x)",
+                   r->code[0], r->code[1], r->code[2],
+                   r->code[3], r->code[4], r->code[5]);
+          break;
+      }
+      ks0108_drawText(offsetX, lHeight*(2+i), BLACK, buffer);
+    }
   } else {
     ks0108_drawText(10,10,BLACK,L"Никого нет");
   }
