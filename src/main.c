@@ -2,12 +2,17 @@
 // Created by Stanislav Lakhtin on 19/11/2016.
 //
 
-#define ONEWIRE_USART3
 #define MAXDEVICES_ON_THE_BUS 3
 
-#include <OneWire.h>
+#include <libopencm3/stm32/usart.h>
+#include <libopencm3/stm32/rcc.h>
+#include <libopencm3/stm32/gpio.h>
+#include <libopencm3/stm32/f1/nvic.h>
+
 #include "OneWire.h"
 #include "ks0108.h"
+
+#define ONEWIRE_USART USART3
 
 static void clock_setup(void)
 {
@@ -29,7 +34,7 @@ static void gpio_setup(void) {
                 GPIO_CNF_OUTPUT_PUSHPULL, GPIO_ALL);
 
   gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_10_MHZ,
-                GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO_USART3_TX);
+                GPIO_CNF_OUTPUT_ALTFN_OPENDRAIN, GPIO_USART3_TX);
 
   gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_10_MHZ,
                 GPIO_CNF_OUTPUT_PUSHPULL, GPIO0); //LCD(KS0108) RESET PIN
@@ -43,14 +48,7 @@ static void gpio_setup(void) {
 }
 
 void usart3_isr(void) {
-  /* Проверяем, что мы вызвали прерывание из-за RXNE. */
-  if (((USART_CR1(USART3) & USART_CR1_RXNEIE) != 0) &&
-      ((USART_SR(USART3) & USART_SR_RXNE) != 0)) {
-
-    /* Получаем данные из периферии и сбрасываем флаг*/
-    rc_buffer[2] = usart_recv_blocking(USART3);
-    recvFlag &= ~(1 << 2);
-  }
+  owReadHandler(ONEWIRE_USART);
 }
 
 void shortDelay(uint32_t);
@@ -62,8 +60,6 @@ void test05(); //управление Start Line на каждом из чипо
 void test06(); //позиционирование текста по любому адресу
 void test07();
 void testDS18B20(); //тест с использованием библиотеки для DS18x20
-
-OneWire ow;
 
 int main(void) {
 
@@ -223,15 +219,16 @@ void test06() {
 }
 
 void testDS18B20() {
-  ow.usart = USART3;
+  OneWire ow;
+  ow.usart = ONEWIRE_USART;
   wchar_t *sT = L"Количество: ";
-  wchar_t buffer[30];
+  wchar_t buffer[100];
   uint8_t offsetX = 4;
   uint8_t lHeight = 8;
   if (owResetCmd(&ow) != ONEWIRE_NOBODY) {
     ks0108_drawText(offsetX, 0, BLACK, L"Найдены сенсоры на шине");
     ks0108_drawText(offsetX, lHeight, BLACK, sT);
-    uint8_t cnt = owScanCmd(&ow);
+    int cnt = owSearchCmd(&ow);
     ks0108_drawInt(offsetX+ks0108_textLength(sT), lHeight, BLACK, cnt, L"%d");
     int i = 0;
     for (; i<cnt; i++) {
@@ -241,13 +238,13 @@ void testDS18B20() {
       switch (ow.ids[i].family) {
         case DS18B20:
           temp = readTemperature(&ow, &ow.ids[i], true);
-          swprintf(buffer, 40, L"(DS18B20:%02x %02x %02x %02x %02x %02x) температура %+000d.%d",
+          swprintf(buffer, 40, L"18B20: %02x%02x%02x%02x%02x%02x: %+000d.%d",
            r->code[0], r->code[1], r->code[2],
            r->code[3], r->code[4], r->code[5], temp.inCelsus, temp.frac);
           break;
         case DS18S20:
           temp = readTemperature(&ow, &ow.ids[i], true);
-          swprintf(buffer, 40, L"(DS18S20:%02x %02x %02x %02x %02x %02x) температура %+000d.%d",
+          swprintf(buffer, 40, L"18B20: %02x%02x%02x%02x%02x%02x: %+000d.%d",
                    r->code[0], r->code[1], r->code[2],
                    r->code[3], r->code[4], r->code[5], temp.inCelsus, temp.frac);
           break;
